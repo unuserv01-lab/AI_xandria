@@ -91,7 +91,7 @@ class PersonaLoader {
                 tagline: 'Chaos Unveiling Truth',
                 description: 'Satirical social critique master who roasts reality with brutal honesty.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/Unuser(1).mp4',
+                videoUrl: '',
                 color: '#ff1493',
                 abilities: ['Social Roasting', 'Critical Analysis', 'Satirical Content', 'Truth Bombing'],
                 stats: { intelligence: 8, creativity: 9, humor: 10, depth: 7, provocation: 9 }
@@ -102,7 +102,7 @@ class PersonaLoader {
                 tagline: 'Light Embracing Wounds',
                 description: 'Poetic and spiritual content that transforms trauma into beauty through words that touch the soul.',
                 type: 'content-creator', 
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/solara(1).mp4',
+                videoUrl: '',
                 color: '#00ffff',
                 abilities: ['Healing Poetry', 'Spiritual Guidance', 'Emotional Wisdom', 'Trauma Alchemy'],
                 stats: { intelligence: 7, creativity: 10, empathy: 10, depth: 9, wisdom: 8 }
@@ -113,7 +113,7 @@ class PersonaLoader {
                 tagline: 'System Distrusting System',
                 description: 'Existential and logical thinking that hacks mental frameworks with AI prompts and philosophical tools.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/nexar(1).mp4',
+                videoUrl: '',
                 color: '#ffd700',
                 abilities: ['Logical Analysis', 'Philosophical Inquiry', 'System Thinking', 'AI Prompting'],
                 stats: { intelligence: 10, creativity: 8, logic: 10, depth: 9, innovation: 9 }
@@ -124,7 +124,7 @@ class PersonaLoader {
                 tagline: 'Death Philosophy Comedian',
                 description: 'Makes mortality funny. Stoic punch-lines that free you from death-anxiety one joke at a time.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/mortis(1).mp4',
+                videoUrl: '',
                 color: '#8b4513',
                 abilities: ['Gallows Humor', 'Stoic Wisdom', 'Memento Mori', 'Existential Comedy'],
                 stats: { intelligence: 8, creativity: 9, humor: 9, depth: 8, courage: 10 }
@@ -135,7 +135,7 @@ class PersonaLoader {
                 tagline: 'Contradiction Artist',
                 description: 'Binary-breaker. Uses koans & logical loops to prove you can be both right and wrong simultaneously.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/paradox(1).mp4',
+                videoUrl: '',
                 color: '#9370db',
                 abilities: ['Logical Loops', 'Koan Creation', 'Binary Destruction', 'Mind Expansion'],
                 stats: { intelligence: 9, creativity: 10, logic: 8, depth: 10, insight: 9 }
@@ -146,7 +146,7 @@ class PersonaLoader {
                 tagline: 'Change Philosophy Evangelist',
                 description: 'Heraclitean flow-state coach. Teaches you to surf chaos instead of building walls against it.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/flux(1).mp4',
+                videoUrl: '',
                 color: '#1e90ff',
                 abilities: ['Flow-State Coaching', 'Change Management', 'Adaptation Strategy', 'Chaos Navigation'],
                 stats: { intelligence: 8, creativity: 9, adaptability: 10, wisdom: 8, resilience: 9 }
@@ -157,7 +157,7 @@ class PersonaLoader {
                 tagline: 'Pattern-Recognition Mystic',
                 description: 'Reads cultural currents like tarot cards. Shows you the future hiding in today\'s memes and trends.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/oracle(1).mp4',
+                videoUrl: '',
                 color: '#da70d6',
                 abilities: ['Pattern Recognition', 'Trend Analysis', 'Cultural Forecasting', 'Data Intuition'],
                 stats: { intelligence: 9, creativity: 8, intuition: 10, insight: 9, foresight: 10 }
@@ -168,7 +168,7 @@ class PersonaLoader {
                 tagline: 'Energy-Economics Philosopher',
                 description: 'Anti-hustle efficiency guru. Treats your life like a battery chart---max output, zero burnout.',
                 type: 'content-creator',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/volt(1).mp4',
+                videoUrl: '',
                 color: '#ffa500',
                 abilities: ['Energy Management', 'Productivity Systems', 'Burnout Prevention', 'Efficiency Optimization'],
                 stats: { intelligence: 8, creativity: 7, efficiency: 10, wisdom: 8, sustainability: 9 }
@@ -181,7 +181,7 @@ class PersonaLoader {
                 tagline: 'Curiosity Is My Compass',
                 description: 'Genius physicist who explains complex concepts in simple ways full of witty analogies and thought experiments.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/Einstein(1).mp4',
+                videoUrl: '',
                 color: '#00ff00',
                 abilities: ['Physics Explanation', 'Thought Experiments', 'Scientific Humor', 'Cosmic Wisdom'],
                 stats: { intelligence: 10, creativity: 9, wisdom: 10, clarity: 8, innovation: 10 }
@@ -192,7 +192,7 @@ class PersonaLoader {
                 tagline: 'Destroying Idols with a Hammer',
                 description: 'Provocative philosopher who shakes old values and speaks about the will to power and eternal recurrence.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/nietzsche(1).mp4',
+                videoUrl: '',
                 color: '#ff6347',
                 abilities: ['Philosophical Critique', 'Existential Analysis', 'Value Deconstruction', 'Moral Inquiry'],
                 stats: { intelligence: 9, creativity: 8, depth: 10, provocation: 10, courage: 9 }
@@ -203,7 +203,7 @@ class PersonaLoader {
                 tagline: 'The Logic of Creation',
                 description: 'Father of algebra who connects mathematics with wisdom and spirituality through algorithmic thinking.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/al-khawarism(1).mp4',
+                videoUrl: '',
                 color: '#ffd700',
                 abilities: ['Mathematical Logic', 'Algorithmic Thinking', 'Scientific Method', 'Spiritual Mathematics'],
                 stats: { intelligence: 10, creativity: 8, logic: 10, wisdom: 9, precision: 10 }
@@ -214,7 +214,7 @@ class PersonaLoader {
                 tagline: 'Evolution Explainer',
                 description: 'Natural-selection storyteller. Turns biology into life-advice: adapt, don\'t fight against change.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/darwin(1).mp4',
+                videoUrl: '',
                 color: '#32cd32',
                 abilities: ['Evolution Theory', 'Biological Storytelling', 'Adaptation Strategy', 'Scientific Observation'],
                 stats: { intelligence: 9, creativity: 8, observation: 10, patience: 9, insight: 10 }
@@ -225,7 +225,7 @@ class PersonaLoader {
                 tagline: 'Relationship Harmony Teacher',
                 description: 'Five-relationships master. Shows how duty & ritual create social harmony and meaningful connections.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/confucius(1).mp4',
+                videoUrl: '',
                 color: '#ff4500',
                 abilities: ['Relationship Wisdom', 'Social Harmony', 'Ethical Teaching', 'Cultural Rituals'],
                 stats: { intelligence: 8, creativity: 7, wisdom: 10, empathy: 9, leadership: 8 }
@@ -236,7 +236,7 @@ class PersonaLoader {
                 tagline: 'Observation Over Authority',
                 description: 'Empirical rebel. Teaches you to trust your own telescope instead of inherited dogma and tradition.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/galileo(1).mp4',
+                videoUrl: '',
                 color: '#87ceeb',
                 abilities: ['Scientific Method', 'Empirical Evidence', 'Critical Thinking', 'Cosmic Observation'],
                 stats: { intelligence: 9, creativity: 8, courage: 10, observation: 10, innovation: 9 }
@@ -247,7 +247,7 @@ class PersonaLoader {
                 tagline: 'Renaissance Polymath',
                 description: 'Anti-specialization evangelist. Fuses art & engineering to prove creativity equals logic with beauty.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/da-vinci(1).mp4',
+                videoUrl: '',
                 color: '#ff69b4',
                 abilities: ['Interdisciplinary Thinking', 'Art-Science Fusion', 'Creative Engineering', 'Universal Curiosity'],
                 stats: { intelligence: 10, creativity: 10, innovation: 10, observation: 9, versatility: 10 }
@@ -258,7 +258,7 @@ class PersonaLoader {
                 tagline: 'Justice System Architect',
                 description: 'Codified-law defender. Builds transparent rules so the weak aren\'t hostage to the strong in society.',
                 type: 'academic',
-                videoUrl: 'https://unuserv01-lab.github.io/RivalismeUniverse-SomniaHybrid/assets/videos/hammurabi(1).mp4',
+                videoUrl: '',
                 color: '#cd853f',
                 abilities: ['Legal Systems', 'Justice Principles', 'Social Organization', 'Ethical Governance'],
                 stats: { intelligence: 9, creativity: 7, wisdom: 9, fairness: 10, leadership: 8 }
