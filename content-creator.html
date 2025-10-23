@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI_xandria - Content Creator Realm</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #000000, #0f0f1a, #1a1a3a);
+      color: #00ffff;
+      font-family: 'Orbitron', sans-serif;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 2px solid rgba(255, 20, 147, 0.3);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(255, 20, 147, 0.2);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      background: linear-gradient(45deg, #ff1493, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow 4s ease-in-out infinite alternate;
+    }
+
+    header p {
+      color: #ffd700;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px #ff1493; }
+      100% { text-shadow: 0 0 25px #00ffff; }
+    }
+
+    /* Responsible Innovation Block */
+    .responsible-innovation {
+      margin: 2rem auto;
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      background: rgba(255, 20, 147, 0.05);
+      max-width: 800px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .responsible-innovation h3 {
+      color: #00ffff;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .innovation-features span {
+      display: inline-block;
+      margin: 5px 10px;
+      color: #ff1493;
+      font-size: 0.9rem;
+    }
+
+    /* Bubble Grid */
+    .bubbles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      justify-items: center;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .persona-bubble {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 20, 147, 0.3), transparent 70%);
+      border: 2px solid rgba(255, 20, 147, 0.5);
+      transition: all 0.5s ease-in-out;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+      animation: float 4s ease-in-out infinite;
+      cursor: pointer;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .persona-bubble video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      filter: brightness(0.8);
+      transition: 0.4s;
+    }
+
+    .persona-bubble:hover video {
+      filter: brightness(1.2);
+      transform: scale(1.05);
+    }
+
+    .persona-bubble.expanded {
+      width: 340px;
+      height: auto;
+      border-radius: 25px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 35px #00ffff;
+      animation: appear 0.6s ease forwards;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .card-content {
+      display: none;
+      padding: 1.2rem;
+      text-align: center;
+      font-family: 'Source Code Pro', monospace;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 25px 25px;
+    }
+
+    .persona-bubble.expanded .card-content {
+      display: block;
+    }
+
+    .persona-name {
+      color: #ffd700;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .persona-desc {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .action-btn {
+      border: 2px solid #00ffff;
+      border-radius: 25px;
+      padding: 0.6rem 1.2rem;
+      background: transparent;
+      color: #00ffff;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .action-btn:hover {
+      background: #00ffff;
+      color: #000;
+      box-shadow: 0 0 20px #00ffff;
+      transform: translateY(-2px);
+    }
+
+    .btn-chat { border-color: #00ff88; color: #00ff88; }
+    .btn-chat:hover { background: #00ff88; color: #000; }
+
+    .btn-generate { border-color: #ff44aa; color: #ff44aa; }
+    .btn-generate:hover { background: #ff44aa; color: #000; }
+
+    .btn-vote { border-color: #ffd700; color: #ffd700; }
+    .btn-vote:hover { background: #ffd700; color: #000; }
+
+    @media(max-width: 768px) {
+      .persona-bubble { width: 180px; height: 180px; }
+      .persona-bubble.expanded { width: 320px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>AI_XANDRIA</h1>
+    <p>Content Creator Realm — The AI Persona Collective</p>
+  </header>
+
+  <div class="responsible-innovation">
+    <h3>🛡️ Responsible Innovation Framework</h3>
+    <p>
+      RivalismeUniverse is committed to developing technology that respects intellectual property rights, human dignity, and digital heritage.
+      All historical personas use public domain information, with an ethical framework for future collaboration with families and official estates.
+    </p>
+    <div class="innovation-features">
+      <span>✅ Authorized Partnerships</span>
+      <span>✅ Clear Attribution</span>
+      <span>✅ Revenue Sharing</span>
+      <span>✅ Authenticity Verification</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="bubbles-grid" id="bubblesContainer"></div>
+  </main>
+
+  <script src="assets/js/wallet-connect.js"></script>
+  <script src="assets/js/realms/content-creator.js"></script>
+  <script src="assets/js/deepseek-chat.js"></script>
+</body>
+</html>
