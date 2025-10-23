@@ -1,0 +1,288 @@
+/* 🌍 3D GLOBE STYLES - Universe Portal Landing */
+.container-3d {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Portal Navigation */
+.portal-navigation {
+    position: fixed;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    z-index: 100;
+    max-width: 1000px;
+    width: 90%;
+}
+
+.portal-card {
+    background: rgba(26, 26, 46, 0.8);
+    border: 2px solid var(--dark-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-bounce);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left var(--transition-slow);
+}
+
+.portal-card:hover::before {
+    left: 100%;
+}
+
+.portal-card:hover {
+    border-color: var(--neon-cyan);
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-glow-cyan), var(--shadow-card);
+}
+
+.portal-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    transition: var(--transition-normal);
+}
+
+.portal-card:hover .portal-icon {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.portal-card h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+    font-size: 1.2rem;
+}
+
+.portal-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Specific portal colors */
+.portal-card[data-realm="content-creator"] {
+    border-color: var(--neon-pink);
+}
+
+.portal-card[data-realm="content-creator"]:hover {
+    border-color: var(--neon-cyan);
+}
+
+.portal-card[data-realm="academic-hall"] {
+    border-color: var(--neon-yellow);
+}
+
+.portal-card[data-realm="academic-hall"]:hover {
+    border-color: var(--neon-green);
+}
+
+.portal-card[data-realm="battle-arena"] {
+    border-color: var(--neon-purple);
+}
+
+.portal-card[data-realm="battle-arena"]:hover {
+    border-color: var(--neon-pink);
+}
+
+.portal-card[data-realm="marketplace"] {
+    border-color: var(--neon-green);
+}
+
+.portal-card[data-realm="marketplace"]:hover {
+    border-color: var(--neon-yellow);
+}
+
+/* Universe Info */
+.universe-info {
+    position: fixed;
+    bottom: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    text-align: center;
+}
+
+.info-stats {
+    display: flex;
+    gap: var(--space-lg);
+    background: rgba(0, 0, 0, 0.8);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--neon-cyan);
+    backdrop-filter: blur(10px);
+}
+
+.info-stats span {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.info-stats span span {
+    color: var(--neon-cyan);
+    font-weight: bold;
+}
+
+/* Three.js Canvas Customization */
+canvas {
+    display: block;
+    outline: none;
+}
+
+/* Globe Controls */
+.globe-controls {
+    position: fixed;
+    top: 50%;
+    right: var(--space-lg);
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    z-index: 100;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 2px solid var(--neon-cyan);
+    border-radius: var(--radius-full);
+    color: var(--neon-cyan);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background: var(--neon-cyan);
+    color: var(--dark-bg);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-glow-cyan);
+}
+
+/* Floating Particles Effect */
+.floating-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--neon-cyan);
+    border-radius: var(--radius-full);
+    animation: float 6s infinite linear;
+    opacity: 0.6;
+}
+
+.particle:nth-child(2n) {
+    background: var(--neon-pink);
+    animation-duration: 8s;
+}
+
+.particle:nth-child(3n) {
+    background: var(--neon-yellow);
+    animation-duration: 10s;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design for 3D Globe */
+@media (max-width: 1024px) {
+    .portal-navigation {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+        bottom: var(--space-lg);
+    }
+    
+    .globe-controls {
+        right: var(--space-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .portal-navigation {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+        bottom: var(--space-md);
+    }
+    
+    .portal-card {
+        padding: var(--space-md);
+    }
+    
+    .portal-icon {
+        font-size: 2rem;
+    }
+    
+    .info-stats {
+        flex-direction: column;
+        gap: var(--space-xs);
+        padding: var(--space-sm);
+    }
+    
+    .globe-controls {
+        display: none; /* Hide controls on mobile for cleaner UI */
+    }
+}
+
+@media (max-width: 480px) {
+    .portal-navigation {
+        width: 95%;
+    }
+    
+    .portal-card h3 {
+        font-size: 1rem;
+    }
+    
+    .portal-card p {
+        font-size: 0.8rem;
+    }
+    
+    .universe-info {
+        bottom: var(--space-sm);
+    }
+}
