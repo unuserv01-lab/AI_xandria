@@ -145,5 +145,3 @@ class NietzschePersona {
         return hammers[Math.floor(Math.random() * hammers.length)];
     }
 }
-
-const nietzschePersona = new NietzschePersona();
