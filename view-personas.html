@@ -431,34 +431,35 @@
 
     <!-- 🚀 INITIALIZATION -->
     <script>
-        // Initialize setelah semua resources loaded
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    
-                    // Initialize carousel system
-                    if (typeof carousel !== 'undefined') {
-                        carousel.init();
-                    }
-                    
-                    // Initialize persona loader
-                    if (typeof personaLoader !== 'undefined') {
-                        personaLoader.init();
-                    }
-                    
-                }, 800);
-            }, 2000);
-        });
-
-        // Error handling
-        window.addEventListener('error', function(e) {
-            console.error('Error loading resource:', e.error);
-            // Fallback ke basic functionality
-            document.getElementById('loadingScreen').style.display = 'none';
-            document.body.innerHTML = '<div style="padding: 2rem; text-align: center;"><h1>AI_XANDRIA</h1><p>Some features may not be available</p></div>';
-        });
-    </script>
+// Debug and force initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎯 DOM Content Loaded - Carousel Init');
+    
+    const carouselContainer = document.getElementById('gameCarousel');
+    console.log('📦 Carousel Container:', carouselContainer);
+    
+    if (carouselContainer) {
+        const personaType = carouselContainer.getAttribute('data-persona-type') || 'content-creator';
+        window.carousel = new CarouselSystem('gameCarousel', personaType);
+        window.carousel.init();
+        console.log('✅ Carousel initialized successfully');
+    } else {
+        console.error('❌ gameCarousel container not found!');
+        
+        // Create container dynamically if missing
+        const newContainer = document.createElement('div');
+        newContainer.id = 'gameCarousel';
+        newContainer.setAttribute('data-persona-type', 'content-creator');
+        newContainer.style.minHeight = '500px';
+        document.body.appendChild(newContainer);
+        
+        console.log('📦 Created new carousel container');
+        
+        // Initialize with new container
+        window.carousel = new CarouselSystem('gameCarousel', 'content-creator');
+        window.carousel.init();
+    }
+});
+</script>
 </body>
 </html>
