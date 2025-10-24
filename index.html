@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>AI Xandria - Persona Economy on Somnia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #0a0010 30%, #000 100%);
+  color: #fff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+#globe-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.ui-overlay {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.ui-overlay > * {
+  pointer-events: auto;
+}
+.main-title {
+  position: fixed;
+  top: clamp(2%, 5vw, 8%);
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(1.8rem, 6vw, 4rem);
+  font-weight: 900;
+  background: linear-gradient(90deg, #ff00ff, #a020f0, #ff00ff, #a020f0);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: cosmicPulse 6s ease-in-out infinite;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #a020f0;
+  z-index: 10;
+  letter-spacing: 2px;
+}
+@keyframes cosmicPulse {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.subtitle {
+  position: fixed;
+  top: clamp(10%, 12vw, 18%);
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(0.8rem, 2.5vw, 1.5rem);
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(160, 32, 240, 0.7);
+  z-index: 10;
+}
+.wallet-section {
+  position: fixed;
+  top: clamp(1rem, 2vw, 2rem);
+  right: clamp(1rem, 2vw, 2rem);
+  display: flex;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  z-index: 20;
+}
+.wallet-btn {
+  padding: clamp(0.6rem, 1.2vw, 0.8rem) clamp(1rem, 2vw, 1.5rem);
+  border: 2px solid #ff00ff;
+  background: rgba(255, 0, 255, 0.1);
+  color: #ff00ff;
+  border-radius: 25px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+.wallet-btn:hover {
+  background: #ff00ff;
+  color: #000;
+  box-shadow: 0 0 20px #ff00ff;
+}
+.wallet-btn.connected {
+  border-color: #00ff00;
+  color: #00ff00;
+  background: rgba(0, 255, 0, 0.1);
+}
+.portal-buttons {
+  position: fixed;
+  bottom: clamp(3%, 5vw, 15%);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  width: 90%;
+  max-width: 800px;
+  z-index: 10;
+}
+.portal-btn {
+  flex: 1 1 160px;
+  padding: clamp(0.6rem, 2vw, 1.2rem) clamp(1rem, 3vw, 2rem);
+  border: 2px solid #a020f0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #a020f0;
+  border-radius: 50px;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  backdrop-filter: blur(8px);
+  text-align: center;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+}
+.portal-btn:hover {
+  background: #a020f0;
+  color: #000;
+  box-shadow: 0 0 25px #a020f0;
+  transform: translateY(-4px);
+}
+
+/* IMPROVED: Form-Based Persona Generator Modal */
+.persona-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 0, 30, 0.98);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    border: 2px solid rgba(255, 0, 255, 0.6);
+    z-index: 9999;
+    display: none;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 60px rgba(255, 0, 255, 0.7);
+}
+
+.persona-modal.active {
+    display: block;
+}
+
+.persona-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 0, 255, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: rgba(15, 0, 30, 0.98);
+    backdrop-filter: blur(25px);
+    z-index: 10;
+}
+
+.persona-modal-header h3 {
+    color: #ff00ff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: #ff00ff;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.close-modal-btn:hover {
+    background: rgba(255, 0, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Form Grid Layout */
+.creator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ff00ff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 0, 255, 0.1);
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #a020f0;
+    box-shadow: 0 0 10px rgba(160, 32, 240, 0.5);
+    background: rgba(255, 0, 255, 0.15);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.generate-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    border: 2px solid #00ff00;
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+    border-radius: 25px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.generate-btn:hover:not(:disabled) {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 20px #00ff00;
+    transform: translateY(-2px);
+}
+
+.generate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Preview Area */
+.preview-section h3 {
+    color: #ff00ff;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.preview-area {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    min-height: 300px;
+}
+
+.preview-placeholder {
+    color: #888;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+}
+
+.persona-preview {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.persona-preview h4 {
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+}
+
+.persona-preview p {
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.persona-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.trait-tag {
+    background: rgba(255, 0, 255, 0.2);
+    border: 1px solid rgba(255, 0, 255, 0.4);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #ff00ff;
+}
+
+.mint-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    border: 2px solid #ff00ff;
+    background: rgba(255, 0, 255, 0.2);
+    color: #ff00ff;
+    border-radius: 25px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+.mint-btn:hover:not(:disabled) {
+    background: #ff00ff;
+    color: #000;
+    box-shadow: 0 0 20px #ff00ff;
+}
+
+.mint-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0010 0%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    transition: opacity 0.8s ease;
+}
+
+.loading-title-persona {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, #ff00ff, #a020f0, #ff00ff);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.loading-bar {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #ff00ff, #a020f0);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Scrollbar Styling */
+.persona-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.persona-modal::-webkit-scrollbar-track {
+    background: rgba(255, 0, 255, 0.1);
+}
+
+.persona-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 0, 255, 0.5);
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .creator-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .persona-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+}
+</style>
+</head>
+<body>
+<div class="loading-screen" id="loadingScreen">
+    <h1 class="loading-title-persona">AI_XANDRIA</h1>
+    <p style="color: #a020f0; margin-bottom: 2rem;">Initializing Persona Portal...</p>
+    <div class="loading-bar">
+        <div class="loading-progress" id="loadingProgress"></div>
+    </div>
+</div>
+
+<div id="globe-container"></div>
+
+<div class="ui-overlay">
+  <h1 class="main-title">AI_XANDRIA</h1>
+  <p class="subtitle">Persona Economy on Somnia Blockchain</p>
+
+  <div class="wallet-section">
+    <button class="wallet-btn" onclick="connectWallet()">🔗 Connect Wallet</button>
+    <button class="wallet-btn" onclick="exploreSomnia()">🌐 Explore Somnia</button>
+  </div>
+
+  <div class="portal-buttons">
+    <button class="portal-btn" style="border-color: #ff00ff; color: #ff00ff;" onclick="window.location.href='content-creator.html'">🎨 Coming Soon...</button>
+    <button class="portal-btn" onclick="window.location.href='view-personas.html'">🏛️ View All Persona</button>
+    <button class="portal-btn" style="border-color: #ff4444; color: #ff4444;" onclick="window.location.href='battle-arena.html'">⚔️ Battle Arena</button>
+    <button class="portal-btn" style="border-color: #ffaa00; color: #ffaa00;" onclick="window.location.href='marketplace.html'">🏪 Market Place</button>
+    <button class="portal-btn" onclick="openPersonaForm()">🤖 Generate Persona</button>
+  </div>
+
+  <!-- IMPROVED: Form-Based Persona Generator Modal -->
+  <div class="persona-modal" id="personaModal">
+      <div class="persona-modal-header">
+          <h3>🎨 Create Your AI Persona</h3>
+          <button class="close-modal-btn" onclick="closePersonaForm()">×</button>
+      </div>
+
+      <div class="creator-grid">
+          <!-- LEFT: Input Form -->
+          <div>
+              <div class="input-group">
+                  <label>📝 Persona Name *</label>
+                  <input type="text" id="personaName" placeholder="e.g., NeonGhost, Master Seijuro">
+              </div>
+
+              <div class="input-group">
+                  <label>🎭 Category *</label>
+                  <select id="personaCategory">
+                      <option value="">Select Category</option>
+                      <option value="content_creator">Content Creator</option>
+                      <option value="academic">Academic</option>
+                      <option value="custom">Custom</option>
+                  </select>
+              </div>
+
+              <div class="input-group">
+                  <label>💼 Specialization *</label>
+                  <input type="text" id="personaSpecialization" placeholder="e.g., Quantum Cryptography, Mindfulness">
+              </div>
+
+              <div class="input-group">
+                  <label>🧠 Personality Traits</label>
+                  <textarea id="personaTraits" rows="3" placeholder="Describe personality, skills, expertise...&#10;e.g., Rebellious, Tech-Savvy, Analytical"></textarea>
+              </div>
+
+              <div class="input-group">
+                  <label>🎨 Visual Description</label>
+                  <textarea id="visualPrompt" rows="2" placeholder="Describe appearance, style, theme...&#10;e.g., Cyberpunk hacker with neon lights"></textarea>
+              </div>
+
+              <button class="generate-btn" onclick="generatePersona()" id="generateBtn">
+                  ✨ Generate AI Persona
+              </button>
+          </div>
+
+          <!-- RIGHT: Preview Area -->
+          <div class="preview-section">
+              <h3>👁️ Preview</h3>
+              <div class="preview-area" id="previewArea">
+                  <div class="preview-placeholder">
+                      <p>🎭 Your AI persona will appear here...</p>
+                      <p style="font-size: 0.8rem; margin-top: 1rem;">Fill the form and click "Generate" to create your unique persona!</p>
+                  </div>
+              </div>
+
+              <button class="mint-btn" id="mintBtn" onclick="mintPersona()" disabled>
+                  🎫 Mint Persona NFT
+              </button>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/modules/wallet-manager.js"></script>
+<script src="assets/js/modules/persona-generator.js"></script>
+</body>
+</html>
