@@ -11,6 +11,10 @@ class PersonaLoader {
         this.setupEventListeners();
     }
 
+// ✅ Tambahan: untuk sinkronisasi ke carousel
+  getCarouselPersonas(type = 'content-creator') {
+    return this.getRealmPersonas(type);
+  }
     // Load personas for specific realm
     async loadRealmPersonas(realmType, containerId) {
         this.currentRealm = realmType;
