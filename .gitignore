@@ -1,34 +1,300 @@
-node_modules/
+# ============================================
+# AI_xandria .gitignore
+# ============================================
+
+# Environment Variables
 .env
+.env.local
+.env.development
+.env.production
+.env.test
+.env*.local
+
+# Node Modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build Outputs
 dist/
 build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# Logs
+logs/
 *.log
+*.log.*
+
+# OS Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE & Editors
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+db_backup/
+database_backups/
+
+# Uploads & Generated Files
+uploads/
+generated/
 generated_metadata/
-cache/
+temp/
+tmp/
+
+# Smart Contracts
+contracts/artifacts/
+contracts/cache/
+contracts/typechain/
+contracts/typechain-types/
+
+# Hardhat
 artifacts/
-```
+cache/
+typechain/
+typechain-types/
 
-### 🚀 Deployment Flow:
+# Solidity
+*.abi
+*.bin
 
-1. **Local Development:**
-   ```bash
-   npm install
-   npm run dev  # Start Express server
-   ```
+# IPFS
+ipfs_uploads/
+.ipfs/
 
-2. **Deploy Contracts:**
-   ```bash
-   npx hardhat compile
-   npx hardhat run scripts/deploy.js --network somniaTestnet
-   ```
+# Private Keys & Secrets (NEVER COMMIT!)
+*.pem
+*.key
+*.private
+private_keys/
+secrets/
+credentials/
 
-3. **Deploy Frontend:** (GitHub Pages / Vercel / Netlify)
-   ```bash
-   npm run build
-   ```
+# Wallet Files
+keystore/
+*.keystore
+*.wallet
 
-4. **Deploy Backend:** (Railway / Heroku / VPS)
-   ```bash
-   git push heroku main
-   ```
+# API Keys
+api_keys.txt
+keys.json
+
+# Certificates
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# CI/CD
+.github/workflows/*.yml
+!.github/workflows/example.yml
+
+# Misc
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.swn
+*.tmp
+
+# MacOS
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# AI Generated (optional - comment if needed)
+# ai_generated/
+# generated_images/
+
+# Backups
+*.backup
+backup/
+backups/
+
+# Editor Configs (keep these)
+!.editorconfig
+!.prettierrc
+!.eslintrc
+
+# Documentation Build
+docs/_build/
+docs/.doctrees/
+
+# Python (if using Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+
+# Temporary
+.temp/
+.tmp/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache
+.parcel-cache
+
+# Next.js
+.next/
+out/
+
+# Nuxt.js
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+public
+
+# VuePress
+.vuepress/dist
+
+# Serverless
+.serverless/
+
+# FuseBox
+.fusebox/
+
+# DynamoDB Local
+.dynamodb/
+
+# TernJS
+.tern-port
+
+# Stores VSCode versions used for testing
+.vscode-test
+
+# Sentry
+.sentryclirc
+
+# ============================================
+# PROJECT SPECIFIC
+# ============================================
+
+# Generated Persona Metadata
+metadata/generated/
+
+# User Uploads
+public/uploads/
+
+# Session Storage
+sessions/
+
+# Redis Dump
+dump.rdb
+
+# PM2
+.pm2/
+pm2.config.js
+
+# Deployment
+.vercel
+.netlify
+
+# Railway
+.railway/
+
+# Heroku
+.heroku/
+
+# ============================================
+# KEEP THESE FILES (whitelist)
+# ============================================
+!.gitkeep
+!.env.example
+!.editorconfig
+!.prettierrc
+!.eslintrc.json
