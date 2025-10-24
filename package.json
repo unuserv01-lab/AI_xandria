@@ -1,18 +1,60 @@
 {
-  "name": "AI_xandria",
+  "name": "ai-xandria",
   "version": "1.0.0",
-  "description": "AI Persona Economy on Somnia Blockchain - Revamped Version",
-  "type": "module",
+  "description": "AI_xandria - AI-Powered Persona Platform with NFT Integration on Somnia Network",
+  "main": "index.html",
   "scripts": {
-    "dev": "cd server && npm run dev",
-    "start": "cd server && npm start",
-    "deploy": "npx hardhat run scripts/deploy.js --network somnia",
-    "compile": "npx hardhat compile",
-    "test": "npx hardhat test"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server:dev": "cd server && npm run dev",
+    "server:start": "cd server && npm start",
+    "db:migrate": "cd server && npm run db:migrate",
+    "db:seed": "cd server && npm run db:seed",
+    "db:reset": "cd server && npm run db:reset",
+    "contracts:compile": "cd contracts && npx hardhat compile",
+    "contracts:deploy": "cd contracts && npx hardhat run scripts/deploy.js --network somniaTestnet",
+    "contracts:test": "cd contracts && npx hardhat test",
+    "install:all": "npm install && cd server && npm install && cd ../contracts && npm install",
+    "clean": "rm -rf node_modules server/node_modules contracts/node_modules dist build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write \"**/*.{js,jsx,json,md,html,css}\"",
+    "test": "npm run test --prefix server && npm run test --prefix contracts"
+  },
+  "keywords": [
+    "ai",
+    "persona",
+    "nft",
+    "blockchain",
+    "somnia",
+    "web3",
+    "deepseek",
+    "ipfs"
+  ],
+  "author": "AI_xandria Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/AI_xandria.v.1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/AI_xandria.v.1/issues"
+  },
+  "homepage": "https://github.com/your-username/AI_xandria.v.1#readme",
+  "dependencies": {
+    "ethers": "^6.9.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
-    "hardhat": "^2.19.0"
+    "vite": "^5.0.8",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0"
   },
-  "keywords": ["blockchain", "ai", "nft", "somnia", "hackathon"]
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
 }
