@@ -1,58 +1,111 @@
-// server/routes/persona.js
+// ============================================
+// Personas Routes - Gallery & Featured Personas
+// Path: /api/personas/*
+// ============================================
 const express = require('express');
 const router = express.Router();
-const db = require('../config/database');
-const { authenticateToken } = require('../middleware/auth');
 
-// GET /api/persona/featured - Get all featured personas
+// ============================================
+// GET /api/personas/featured
+// Get all featured personas for gallery
+// ============================================
 router.get('/featured', async (req, res) => {
   try {
     const { category, sort } = req.query;
     
-    let query = 'SELECT * FROM personas WHERE is_featured = TRUE';
-    const params = [];
+    console.log(`🔍 Fetching featured personas - Category: ${category || 'all'}, Sort: ${sort || 'newest'}`);
     
-    if (category) {
-      query += ' AND category = $1';
+    let query = `
+      SELECT 
+        persona_id as id,
+        name,
+        tagline,
+        personality,
+        description as backstory,
+        image_url as avatar_url,
+        price,
+        category,
+        traits,
+        is_featured,
+        rating,
+        total_chats as total_interactions,
+        created_at
+      FROM personas 
+      WHERE is_featured = TRUE AND is_active = TRUE
+    `;
+    
+    const params = [];
+    let paramIndex = 1;
+    
+    // Filter by category
+    if (category && category !== '') {
+      query += ` AND category = $${paramIndex}`;
       params.push(category);
+      paramIndex++;
     }
     
-    // Sorting options
+    // Apply sorting
     if (sort === 'popular') {
-      query += ' ORDER BY total_interactions DESC';
+      query += ' ORDER BY total_chats DESC, rating DESC';
     } else if (sort === 'price_low') {
       query += ' ORDER BY price ASC';
     } else if (sort === 'price_high') {
       query += ' ORDER BY price DESC';
     } else if (sort === 'rating') {
-      query += ' ORDER BY rating DESC';
+      query += ' ORDER BY rating DESC, total_chats DESC';
     } else {
+      // Default: newest first
       query += ' ORDER BY created_at DESC';
     }
     
-    const result = await db.query(query, params);
+    const result = await global.db.query(query, params);
     
+    console.log(`✅ Found ${result.rows.length} featured personas`);
+    
+    // Return in expected format
     res.json({
       success: true,
       personas: result.rows,
       total: result.rows.length
     });
+    
   } catch (error) {
-    console.error('Error fetching personas:', error);
+    console.error('❌ Error fetching featured personas:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch personas'
+      message: 'Failed to fetch personas',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
 
-// GET /api/persona/:id - Get single persona detail
+// ============================================
+// GET /api/personas/:id
+// Get single persona detail
+// ============================================
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
-    const result = await db.query(
-      'SELECT * FROM personas WHERE id = $1',
+    console.log(`🔍 Fetching persona: ${id}`);
+    
+    const result = await global.db.query(
+      `SELECT 
+        persona_id as id,
+        name,
+        tagline,
+        personality,
+        description as backstory,
+        image_url as avatar_url,
+        price,
+        category,
+        traits,
+        rating,
+        total_chats as total_interactions,
+        is_featured,
+        created_at
+      FROM personas 
+      WHERE persona_id = $1 OR id::text = $1`,
       [id]
     );
     
@@ -63,120 +116,77 @@ router.get('/:id', async (req, res) => {
       });
     }
     
+    console.log(`✅ Persona found: ${result.rows[0].name}`);
+    
     res.json({
       success: true,
       persona: result.rows[0]
     });
+    
   } catch (error) {
-    console.error('Error fetching persona:', error);
+    console.error('❌ Error fetching persona:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch persona'
+      message: 'Failed to fetch persona',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
 
-// POST /api/persona/generate - Generate custom persona (existing)
-router.post('/generate', authenticateToken, async (req, res) => {
+// ============================================
+// GET /api/personas/search
+// Search personas by name or description
+// ============================================
+router.get('/search', async (req, res) => {
   try {
-    const { prompt } = req.body;
-    const userId = req.user.id;
+    const { q, limit = 20 } = req.query;
     
-    // Call AI API (Deepseek/Gemini) untuk generate persona
-    // ... existing generate logic ...
-    
-    res.json({
-      success: true,
-      message: 'Persona generated successfully'
-    });
-  } catch (error) {
-    console.error('Error generating persona:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to generate persona'
-    });
-  }
-});
-
-// GET /api/persona/my-interactions - Get user's unlocked personas
-router.get('/my-interactions', authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    
-    const result = await db.query(`
-      SELECT 
-        p.*,
-        pi.chat_unlocked,
-        pi.interaction_count,
-        pi.last_chat_at,
-        pi.amount_paid
-      FROM personas p
-      INNER JOIN persona_interactions pi ON p.id = pi.persona_id
-      WHERE pi.user_id = $1 AND pi.chat_unlocked = TRUE
-      ORDER BY pi.last_chat_at DESC
-    `, [userId]);
-    
-    res.json({
-      success: true,
-      interactions: result.rows
-    });
-  } catch (error) {
-    console.error('Error fetching interactions:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch interactions'
-    });
-  }
-});
-
-// POST /api/persona/:id/rate - Rate a persona
-router.post('/:id/rate', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { rating, comment } = req.body;
-    const userId = req.user.id;
-    
-    // Check if user has unlocked this persona
-    const hasAccess = await db.query(
-      'SELECT * FROM persona_interactions WHERE user_id = $1 AND persona_id = $2 AND chat_unlocked = TRUE',
-      [userId, id]
-    );
-    
-    if (hasAccess.rows.length === 0) {
-      return res.status(403).json({
+    if (!q || q.trim() === '') {
+      return res.status(400).json({
         success: false,
-        message: 'You must unlock this persona before rating'
+        message: 'Search query is required'
       });
     }
     
-    // Insert or update review
-    await db.query(`
-      INSERT INTO persona_reviews (user_id, persona_id, rating, comment)
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT (user_id, persona_id) 
-      DO UPDATE SET rating = $3, comment = $4
-    `, [userId, id, rating, comment]);
+    console.log(`🔍 Searching personas: "${q}"`);
     
-    // Update persona average rating
-    const avgResult = await db.query(
-      'SELECT AVG(rating) as avg_rating FROM persona_reviews WHERE persona_id = $1',
-      [id]
-    );
+    const query = `
+      SELECT 
+        persona_id as id,
+        name,
+        tagline,
+        image_url as avatar_url,
+        category,
+        price,
+        rating
+      FROM personas 
+      WHERE is_active = TRUE
+        AND (
+          name ILIKE $1 
+          OR tagline ILIKE $1 
+          OR description ILIKE $1
+          OR category ILIKE $1
+        )
+      ORDER BY rating DESC
+      LIMIT $2
+    `;
     
-    await db.query(
-      'UPDATE personas SET rating = $1 WHERE id = $2',
-      [avgResult.rows[0].avg_rating, id]
-    );
+    const result = await global.db.query(query, [`%${q}%`, parseInt(limit)]);
+    
+    console.log(`✅ Found ${result.rows.length} matching personas`);
     
     res.json({
       success: true,
-      message: 'Rating submitted successfully'
+      personas: result.rows,
+      total: result.rows.length
     });
+    
   } catch (error) {
-    console.error('Error rating persona:', error);
+    console.error('❌ Error searching personas:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to submit rating'
+      message: 'Failed to search personas',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
