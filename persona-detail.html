@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Persona | AI_xandria</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/persona-detail.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo"> AI_xandria</a>
+            <div class="nav-links">
+                <a href="/">Generate</a>
+                <a href="/view-personas.html">Explore</a>
+                <a href="/my-chats.html">My Chats</a>
+                <div class="wallet-info" id="walletInfo">
+                    <span class="wallet-address" id="walletAddress">Connect Wallet</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Persona Header -->
+    <section class="persona-header" id="personaHeader">
+        <div class="container">
+            <button class="back-btn" onclick="window.history.back()">← Back</button>
+            
+            <div class="persona-header-content">
+                <div class="persona-avatar-large">
+                    <img id="personaAvatar" src="" alt="Persona Avatar">
+                </div>
+                <div class="persona-info">
+                    <h1 id="personaName">Loading...</h1>
+                    <p class="tagline" id="personaTagline"></p>
+                    <div class="persona-meta">
+                        <span class="category-badge" id="personaCategory"></span>
+                        <span class="price-badge" id="personaPrice">💎 0 STT</span>
+                        <span class="rating" id="personaRating">⭐ 0.0</span>
+                        <span class="interactions" id="personaInteractions">👥 0</span>
+                    </div>
+                    <div class="personality-traits" id="personalityTraits"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Sidebar: Persona Details -->
+                <aside class="sidebar">
+                    <div class="card">
+                        <h3>About</h3>
+                        <p id="personaPersonality"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Backstory</h3>
+                        <p id="personaBackstory"></p>
+                    </div>
+
+                    <div class="card">
+                        <h3>Traits</h3>
+                        <div class="traits-chart" id="traitsChart">
+                            <!-- Traits will be injected here -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Rate this Persona</h3>
+                        <div class="rating-input" id="ratingSection">
+                            <div class="stars">
+                                <span class="star" data-rating="1">⭐</span>
+                                <span class="star" data-rating="2">⭐</span>
+                                <span class="star" data-rating="3">⭐</span>
+                                <span class="star" data-rating="4">⭐</span>
+                                <span class="star" data-rating="5">⭐</span>
+                            </div>
+                            <textarea id="reviewComment" placeholder="Share your experience..."></textarea>
+                            <button class="btn btn-secondary" id="submitRating">Submit Review</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main: Chat Interface -->
+                <main class="chat-section">
+                    <!-- Locked State -->
+                    <div class="locked-overlay" id="lockedOverlay">
+                        <div class="lock-card">
+                            <div class="lock-icon">🔒</div>
+                            <h2>Unlock this Conversation</h2>
+                            <p>Pay <span id="unlockPrice">0 STT</span> to start chatting with <span id="unlockPersonaName"></span></p>
+                            <button class="btn btn-primary btn-large" id="unlockBtn">
+                                💎 Pay & Unlock Chat
+                            </button>
+                            <p class="disclaimer">One-time payment for unlimited conversations</p>
+                        </div>
+                    </div>
+
+                    <!-- Chat Interface (Hidden until unlocked) -->
+                    <div class="chat-container" id="chatContainer" style="display: none;">
+                        <div class="chat-header">
+                            <h3>💬 Chat with <span id="chatPersonaName"></span></h3>
+                            <span class="status-indicator">🟢 Online</span>
+                        </div>
+
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="welcome-message">
+                                <p>👋 Chat unlocked! Start your conversation below.</p>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <textarea 
+                                id="chatInput" 
+                                placeholder="Type your message..."
+                                rows="3"
+                            ></textarea>
+                            <button class="btn btn-primary" id="sendBtn">
+                                Send ✈️
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Deepseek Chat Widget (Alternative) -->
+                    <div class="deepseek-widget" id="deepseekWidget" style="display: none;">
+                        <iframe 
+                            id="deepseekFrame"
+                            src="" 
+                            width="100%" 
+                            height="600px"
+                            frameborder="0"
+                        ></iframe>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>💳 Complete Payment</h2>
+            <div class="payment-details">
+                <div class="payment-row">
+                    <span>Persona:</span>
+                    <strong id="paymentPersonaName"></strong>
+                </div>
+                <div class="payment-row">
+                    <span>Amount:</span>
+                    <strong id="paymentAmount">0.0000002STT</strong>
+                </div>
+                <div class="payment-row">
+                    <span>Your Wallet:</span>
+                    <code id="paymentWallet"></code>
+                </div>
+            </div>
+            
+            <div class="payment-status" id="paymentStatus">
+                <div class="spinner"></div>
+                <p>Processing payment...</p>
+            </div>
+
+            <div class="payment-actions">
+                <button class="btn btn-secondary" id="cancelPayment">Cancel</button>
+                <button class="btn btn-primary" id="confirmPayment">Confirm Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/assets/js/modules/wallet-manager.js"></script>
+    <script src="/assets/js/modules/pay-to-chat.js"></script>
+    <script src="/assets/js/modules/persona-chat.js"></script>
+</body>
+</html>
