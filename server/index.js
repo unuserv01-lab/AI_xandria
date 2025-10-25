@@ -27,11 +27,13 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: process.env.DATABASE_URL?.includes('railway') 
+        ? { rejectUnauthorized: false }  // ✅ Railway butuh SSL!
+        : false,
     max: parseInt(process.env.DB_POOL_MAX) || 10,
     min: parseInt(process.env.DB_POOL_MIN) || 2,
     idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS) || 30000,
-    connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MS) || 2000
+    connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT_MS) || 5000
 });
 
 // Test database connection
@@ -168,6 +170,7 @@ app.post('/api/seed-personas', async (req, res) => {
 // ============================================
 
 const personaRoutes = require('./routes/persona');
+const personasRoutes = require('./routes/personas');
 const chatRoutes = require('./routes/chat');
 const ipfsRoutes = require('./routes/ipfs');
 const walletRoutes = require('./routes/wallet');
@@ -175,6 +178,7 @@ const battleRoutes = require('./routes/battle');
 const marketplaceRoutes = require('./routes/marketplace');
 
 app.use('/api/persona', personaRoutes);
+app.use('/api/personas', personasRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/ipfs', ipfsRoutes);
 app.use('/api/wallet', walletRoutes);
