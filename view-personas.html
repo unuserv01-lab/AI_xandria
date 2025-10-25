@@ -3,463 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI_XANDRIA - Persona Selection System</title>
-    
-    <!-- 🔮 META SEO -->
-    <meta name="title" content="AI_XANDRIA - Dimensional Persona Portal">
-    <meta name="description" content="AI_XANDRIA: Where Artificial Intelligence Meets Infinite Personalities. Explore, interact, and collect AI personas.">
-    <meta name="keywords" content="AI_XANDRIA, AI Persona, Artificial Intelligence, Digital Beings, NFT Persona">
-    <meta name="author" content="AI_XANDRIA">
-    
-    <!-- 🌌 OPEN GRAPH -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourusername.github.io/reponame/">
-    <meta property="og:title" content="AI_XANDRIA - Persona Selection System">
-    <meta property="og:description" content="Explore infinite AI personalities in the Xandria universe.">
-    <meta property="og:image" content="assets/images/preview.jpg">
-    
-    <!-- 🐦 TWITTER CARD -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI_XANDRIA - Persona Selection System">
-    <meta name="twitter:description" content="Where Artificial Intelligence Meets Infinite Personalities">
-    <meta name="twitter:image" content="assets/images/preview.jpg">
-    
-    <!-- 🔗 FAVICON -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-    
-    <!-- 🎨 GOOGLE FONTS -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;600;800&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- 💫 CSS -->
-    <link rel="stylesheet" href="assets/css/persona-bubbles.css">
-    
-    <!-- 🎮 GAME STYLES -->
-    <style>
-        /* === COSMIC BACKGROUND === */
-        body {
-            background: linear-gradient(135deg, #000000 0%, #0f0f0f 30%, #1a1a2e 70%, #000000 100%);
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Cosmic Stars */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
-            background-repeat: repeat;
-            background-size: 200px 100px;
-            animation: cosmicMove 60s linear infinite;
-            opacity: 0.8;
-            z-index: -1;
-        }
-
-        @keyframes cosmicMove {
-            from { transform: translateY(0px); }
-            to { transform: translateY(-100px); }
-        }
-
-        /* === LOADING SCREEN === */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #000000 0%, #1a1a2e 100%);
-            display: grid;
-            place-items: center;
-            z-index: 1000;
-            transition: opacity 0.8s ease;
-        }
-
-        .loading-title {
-            font-family: 'Cinzel', serif;
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: 6px;
-            margin-bottom: 2rem;
-            background: linear-gradient(45deg, #ff1493, #00ffff, #ffffff, #ff1493);
-            background-size: 300% 300%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: neonPulse 4s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(255,20,147,0.8);
-        }
-
-        .loading-quote {
-            font-family: 'Source Code Pro', monospace;
-            font-size: 1.2rem;
-            color: #00ffff;
-            text-align: center;
-            opacity: 0;
-            animation: fadeIn 2s forwards 1s;
-        }
-
-        @keyframes neonPulse {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* === GAME HEADER === */
-        .game-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 2rem;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(15px);
-            border-bottom: 3px solid rgba(255, 20, 147, 0.5);
-            z-index: 100;
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .game-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff1493, #00ffff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-        }
-
-        .game-subtitle {
-            font-size: 1rem;
-            color: #00ffff;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            margin-top: 0.2rem;
-        }
-
-        .game-stats {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            display: block;
-            font-weight: bold;
-            color: #00ffff;
-            font-size: 1.1rem;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-
-        /* === CAROUSEL CONTAINER === */
-        .game-carousel-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90vw;
-            height: 70vh;
-            perspective: 1000px;
-            z-index: 10;
-            display: none;
-        }
-
-        .game-carousel {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .carousel-item {
-            position: absolute;
-            width: 300px;
-            height: 400px;
-            background: rgba(30, 41, 59, 0.9);
-            border-radius: 25px;
-            border: 3px solid rgba(255, 20, 147, 0.3);
-            backdrop-filter: blur(10px);
-            transition: all 0.5s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .carousel-item.active {
-            border-color: #ff1493;
-            box-shadow: 0 0 50px rgba(255, 20, 147, 0.6);
-            transform: scale(1.1) translateZ(50px);
-            z-index: 10;
-        }
-
-        .carousel-item.left {
-            transform: translateX(-80%) scale(0.8) rotateY(20deg);
-            opacity: 0.7;
-            z-index: 5;
-        }
-
-        .carousel-item.right {
-            transform: translateX(80%) scale(0.8) rotateY(-20deg);
-            opacity: 0.7;
-            z-index: 5;
-        }
-
-        .carousel-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff1493, #00ffff);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-        }
-
-        .carousel-name {
-            font-family: 'Cinzel', serif;
-            font-size: 1.8rem;
-            color: #00ffff;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        .carousel-tagline {
-            color: #ff1493;
-            font-style: italic;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-
-        .carousel-description {
-            color: #cbd5e1;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 1.5rem;
-        }
-
-        /* === NAVIGATION === */
-        .nav-controls {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: none;
-            gap: 2rem;
-            z-index: 100;
-        }
-
-        .nav-btn {
-            padding: 1rem 2rem;
-            background: rgba(255, 20, 147, 0.2);
-            border: 2px solid #ff1493;
-            color: #ff1493;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-btn:hover {
-            background: #ff1493;
-            color: #000000;
-            box-shadow: 0 0 30px #ff1493;
-            transform: translateY(-3px);
-        }
-
-        .select-btn {
-            background: rgba(0, 255, 255, 0.2);
-            border: 2px solid #00ffff;
-            color: #00ffff;
-        }
-
-        .select-btn:hover {
-            background: #00ffff;
-            color: #000000;
-            box-shadow: 0 0 30px #00ffff;
-        }
-
-        .selection-indicator {
-            position: fixed;
-            bottom: 8rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #00ffff;
-            font-family: 'Source Code Pro', monospace;
-            font-size: 1rem;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            z-index: 100;
-            display: none;
-        }
-
-        /* === RESPONSIVE === */
-        @media (max-width: 768px) {
-            .game-title { font-size: 1.8rem; }
-            .game-stats { gap: 1rem; }
-            .carousel-item { width: 250px; height: 350px; }
-            .nav-controls { bottom: 1rem; gap: 1rem; }
-            .nav-btn { padding: 0.8rem 1.5rem; font-size: 0.9rem; }
-        }
-    </style>
+    <title>Explore AI Personas | SoulThink</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/personas.css">
 </head>
 <body>
-    <!-- 🎮 LOADING SCREEN -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-content">
-            <h1 class="loading-title">AI_XANDRIA</h1>
-            <div class="loading-quote">
-                "Where Artificial Intelligence Meets Infinite Personalities"
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🧠 SoulThink</a>
+            <div class="nav-links">
+                <a href="/">Generate</a>
+                <a href="/view-personas.html" class="active">Explore</a>
+                <a href="/my-chats.html">My Chats</a>
+                <div class="wallet-info" id="walletInfo">
+                    <span class="wallet-address" id="walletAddress">Connect Wallet</span>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- 🎯 GAME HEADER -->
-    <div class="game-header" id="gameHeader">
-        <div class="header-left">
-            <div class="game-title">AI_XANDRIA</div>
-            <div class="game-subtitle">Persona Selection System</div>
+    <!-- Hero Section -->
+    <section class="hero-small">
+        <div class="container">
+            <h1>✨ Explore AI Personas</h1>
+            <p>Choose your perfect AI companion and unlock meaningful conversations</p>
         </div>
-        <div class="game-stats">
-            <div class="stat-item">
-                <span class="stat-value" id="totalPersonas">17</span>
-                <span class="stat-label">Personas</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="activeUsers">2.4K</span>
-                <span class="stat-label">Active</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="onlineNow">148</span>
-                <span class="stat-label">Online</span>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="mystical">Mystical</option>
+                    <option value="motivation">Motivation</option>
+                    <option value="tech">Tech</option>
+                    <option value="wellness">Wellness</option>
+                    <option value="creative">Creative</option>
+                    <option value="education">Education</option>
+                    <option value="science">Science</option>
+                    <option value="psychology">Psychology</option>
+                    <option value="arts">Arts</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="therapy">Therapy</option>
+                    <option value="business">Business</option>
+                    <option value="literature">Literature</option>
+                    <option value="lifecoach">Life Coach</option>
+                    <option value="futurism">Futurism</option>
+                    <option value="relationships">Relationships</option>
+                </select>
+
+                <select id="sortFilter" class="filter-select">
+                    <option value="newest">Newest First</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                </select>
+
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search personas...">
+                    <span class="search-icon">🔍</span>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 🎠 CAROUSEL -->
-    <div class="game-carousel-container" id="carouselContainer">
-        <div class="game-carousel" id="gameCarousel">
-            <!-- Carousel items akan diisi oleh JavaScript -->
+    <!-- Personas Grid -->
+    <section class="personas-section">
+        <div class="container">
+            <div class="personas-grid" id="personasGrid">
+                <!-- Loading State -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading personas...</p>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">🔍</div>
+                <h3>No personas found</h3>
+                <p>Try adjusting your filters or search terms</p>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 📍 SELECTION INDICATOR -->
-    <div class="selection-indicator" id="selectionIndicator">
-        Selected: <span id="selectedPersona">UNUSER</span>
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 SoulThink. Powered by AI & Blockchain.</p>
+        </div>
+    </footer>
 
-    <!-- 🎛️ NAVIGATION -->
-    <div class="nav-controls" id="navControls">
-        <button class="nav-btn prev-btn" onclick="carousel.prev()">◀ PREV</button>
-        <button class="nav-btn select-btn" onclick="carousel.select()">SELECT PERSONA</button>
-        <button class="nav-btn next-btn" onclick="carousel.next()">NEXT ▶</button>
-    </div>
-
-    <!-- 🌌 PERSONA UNIVERSE PAGES -->
-    <div id="persona-page" style="display: none;">
-        <!-- Halaman universe akan dimuat di sini -->
-    </div>
-
-    <!-- ⚡ JAVASCRIPT LIBS -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    
-    <!-- 🎮 CORE SYSTEMS -->
-    <script src="assets/js/modules/carousel-system.js"></script>
-    <script src="assets/js/modules/persona-loader.js"></script>
-    <script src="assets/js/modules/wallet-manager.js"></script>
-    
-    <!-- 👥 PERSONA SCRIPTS -->
-    <!-- Content Creators -->
-    <script src="assets/personas/content-creator/unuser.js"></script>
-    <script src="assets/personas/content-creator/solara.js"></script>
-    <script src="assets/personas/content-creator/nexar.js"></script>
-    <script src="assets/personas/content-creator/mortis.js"></script>
-    <script src="assets/personas/content-creator/paradox.js"></script>
-    <script src="assets/personas/content-creator/flux.js"></script>
-    <script src="assets/personas/content-creator/oracle.js"></script>
-    <script src="assets/personas/content-creator/volt.js"></script>
-    
-    <!-- Academics -->
-    <script src="assets/personas/academic/einstein.js"></script>
-    <script src="assets/personas/academic/nietzsche.js"></script>
-    <script src="assets/personas/academic/alkhwarizmi.js"></script>
-    <script src="assets/personas/academic/darwin.js"></script>
-    <script src="assets/personas/academic/confucius.js"></script>
-    <script src="assets/personas/academic/galileo.js"></script>
-    <script src="assets/personas/academic/davinci.js"></script>
-    <script src="assets/personas/academic/hammurabi.js"></script>
-    
-    <!-- Special -->
-    <script src="special/mirage.js"></script>
-
-    <!-- 🚀 INITIALIZATION -->
-    <script>
-// Debug and force initialization
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎯 DOM Content Loaded - Carousel Init');
-    
-    const carouselContainer = document.getElementById('gameCarousel');
-    console.log('📦 Carousel Container:', carouselContainer);
-    
-    if (carouselContainer) {
-        const personaType = carouselContainer.getAttribute('data-persona-type') || 'content-creator';
-        window.carousel = new CarouselSystem('gameCarousel', personaType);
-        window.carousel.init();
-        console.log('✅ Carousel initialized successfully');
-    } else {
-        console.error('❌ gameCarousel container not found!');
-        
-        // Create container dynamically if missing
-        const newContainer = document.createElement('div');
-        newContainer.id = 'gameCarousel';
-        newContainer.setAttribute('data-persona-type', 'content-creator');
-        newContainer.style.minHeight = '500px';
-        document.body.appendChild(newContainer);
-        
-        console.log('📦 Created new carousel container');
-        
-        // Initialize with new container
-        window.carousel = new CarouselSystem('gameCarousel', 'content-creator');
-        window.carousel.init();
-    }
-});
-</script>
+    <!-- Scripts -->
+    <script src="/assets/js/modules/wallet-connect.js"></script>
+    <script src="/assets/js/modules/persona-gallery.js"></script>
 </body>
 </html>
