@@ -225,3 +225,32 @@ BEGIN
     RAISE NOTICE '';
     RAISE NOTICE '🚀 Ready to start developing!';
 END $$;
+
+-- Mark some personas as featured for the gallery
+UPDATE personas 
+SET is_featured = true 
+WHERE persona_id IN (
+    SELECT persona_id FROM personas 
+    WHERE category IN ('content-creator', 'academic')
+    AND image_url IS NOT NULL
+    AND LENGTH(description) > 50
+    ORDER BY RANDOM()
+    LIMIT 12
+);
+
+-- Add some default stats to personas
+UPDATE personas 
+SET stats = JSONB_SET(
+    COALESCE(stats, '{}'::jsonb), 
+    '{rating}', 
+    TO_JSONB(ROUND((4.0 + RANDOM() * 1.5)::numeric, 1))
+)
+WHERE stats->>'rating' IS NULL;
+
+UPDATE personas 
+SET stats = JSONB_SET(
+    COALESCE(stats, '{}'::jsonb), 
+    '{total_chats}', 
+    TO_JSONB(FLOOR(RANDOM() * 1000)::int)
+)
+WHERE stats->>'total_chats' IS NULL;
