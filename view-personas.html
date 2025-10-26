@@ -3,103 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explore AI Personas | SoulThink</title>
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/personas.css">
+    <title>AI Personas - AI_xandria</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/personas.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="logo">🧠 SoulThink</a>
-            <div class="nav-links">
-                <a href="/">Generate</a>
-                <a href="/view-personas.html" class="active">Explore</a>
-                <a href="/my-chats.html">My Chats</a>
-                <div class="wallet-info" id="walletInfo">
-                    <span class="wallet-address" id="walletAddress">Connect Wallet</span>
+    <!-- Game Header -->
+    <header class="game-header">
+        <div class="header-left">
+            <div class="game-title">AI_XANDRIA</div>
+            <div class="game-subtitle">Digital Library of AI Personas</div>
+        </div>
+        <div class="game-stats">
+            <div class="stat-item">
+                <span class="stat-value" id="totalPersonas">0</span>
+                <span class="stat-label">Personas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="onlineUsers">0</span>
+                <span class="stat-label">Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Wallet Connection -->
+    <button class="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-small">
+            <div class="container">
+                <h1>AI Personas Gallery</h1>
+                <p>Discover and interact with unique AI personalities</p>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="filters-section">
+            <div class="container">
+                <div class="filters">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="content-creator">Content Creator</option>
+                        <option value="academic">Academic</option>
+                        <option value="special">Special</option>
+                    </select>
+                    
+                    <select id="sortFilter" class="filter-select">
+                        <option value="newest">Newest First</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search personas...">
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Hero Section -->
-    <section class="hero-small">
+        <!-- Tab Navigation -->
         <div class="container">
-            <h1>✨ Explore AI Personas</h1>
-            <p>Choose your perfect AI companion and unlock meaningful conversations</p>
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="featured">Featured Personas</button>
+                <button class="tab-btn" data-tab="my-collection">My Collection</button>
+            </div>
         </div>
-    </section>
 
-    <!-- Filters -->
-    <section class="filters-section">
-        <div class="container">
-            <div class="filters">
-                <select id="categoryFilter" class="filter-select">
-                    <option value="">All Categories</option>
-                    <option value="mystical">Mystical</option>
-                    <option value="motivation">Motivation</option>
-                    <option value="tech">Tech</option>
-                    <option value="wellness">Wellness</option>
-                    <option value="creative">Creative</option>
-                    <option value="education">Education</option>
-                    <option value="science">Science</option>
-                    <option value="psychology">Psychology</option>
-                    <option value="arts">Arts</option>
-                    <option value="fitness">Fitness</option>
-                    <option value="therapy">Therapy</option>
-                    <option value="business">Business</option>
-                    <option value="literature">Literature</option>
-                    <option value="lifecoach">Life Coach</option>
-                    <option value="futurism">Futurism</option>
-                    <option value="relationships">Relationships</option>
-                </select>
+        <!-- Personas Section -->
+        <section class="personas-section">
+            <div class="container">
+                <!-- Featured Personas Tab -->
+                <div id="featured-tab" class="tab-content active">
+                    <div id="personasGrid" class="personas-grid">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div id="loadingState" class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Loading personas...</p>
+                    </div>
 
-                <select id="sortFilter" class="filter-select">
-                    <option value="newest">Newest First</option>
-                    <option value="popular">Most Popular</option>
-                    <option value="rating">Highest Rated</option>
-                    <option value="price_low">Price: Low to High</option>
-                    <option value="price_high">Price: High to Low</option>
-                </select>
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <div class="empty-icon">🤖</div>
+                        <h3>No Personas Found</h3>
+                        <p>Try adjusting your filters or check back later for new personas.</p>
+                    </div>
+                </div>
 
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search personas...">
-                    <span class="search-icon">🔍</span>
+                <!-- My Collection Tab -->
+                <div id="my-collection-tab" class="tab-content">
+                    <div id="myCollectionGrid" class="personas-grid">
+                        <!-- Will be populated with user's personas -->
+                    </div>
+                    
+                    <div id="emptyCollection" class="empty-state" style="display: none;">
+                        <div class="empty-icon">🎨</div>
+                        <h3>Your Collection is Empty</h3>
+                        <p>Generate personas in the creator to build your collection!</p>
+                        <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                            Create Persona
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Personas Grid -->
-    <section class="personas-section">
-        <div class="container">
-            <div class="personas-grid" id="personasGrid">
-                <!-- Loading State -->
-                <div class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Loading personas...</p>
-                </div>
-            </div>
-
-            <!-- Empty State -->
-            <div class="empty-state" id="emptyState" style="display: none;">
-                <div class="empty-icon">🔍</div>
-                <h3>No personas found</h3>
-                <p>Try adjusting your filters or search terms</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 SoulThink. Powered by AI & Blockchain.</p>
-        </div>
-    </footer>
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+        <button class="nav-btn" onclick="window.location.href='battle-arena.html'">⚔️ Arena</button>
+        <button class="nav-btn" onclick="window.location.href='marketplace.html'">🛒 Marketplace</button>
+    </div>
 
     <!-- Scripts -->
-    <script src="/assets/js/modules/wallet-connect.js"></script>
-    <script src="/assets/js/modules/persona-gallery.js"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/modules/wallet-manager.js"></script>
+    <script src="assets/js/modules/persona-gallery.js"></script>
+    
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
+                
+                // Load content based on tab
+                if (btn.dataset.tab === 'my-collection') {
+                    loadMyCollection();
+                }
+            });
+        });
+
+        // Load my collection
+        async function loadMyCollection() {
+            const grid = document.getElementById('myCollectionGrid');
+            const emptyState = document.getElementById('emptyCollection');
+            
+            if (!window.currentWalletAddress) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${window.CONFIG.API_BASE_URL}/persona/owned?walletAddress=${window.currentWalletAddress}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success && data.personas.length > 0) {
+                        grid.innerHTML = data.personas.map(persona => createPersonaCard(persona)).join('');
+                        emptyState.style.display = 'none';
+                    } else {
+                        grid.innerHTML = '';
+                        emptyState.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading collection:', error);
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // Create persona card HTML (reuse from persona-gallery.js)
+        function createPersonaCard(persona) {
+            return `
+                <div class="persona-card" data-persona-id="${persona.id}">
+                    <div class="persona-card-header">
+                        <img src="${persona.avatar_url}" alt="${persona.name}" class="persona-avatar" 
+                             onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${persona.name}'">
+                        <div class="persona-badge">${getCategoryEmoji(persona.category)}</div>
+                    </div>
+                    <div class="persona-card-body">
+                        <h3 class="persona-name">${persona.name}</h3>
+                        <p class="persona-tagline">${persona.tagline}</p>
+                        <div class="persona-stats">
+                            <span class="stat">
+                                <span class="stat-icon">⭐</span>
+                                <span class="stat-value">${(persona.rating || 0).toFixed(1)}</span>
+                            </span>
+                            <span class="stat">
+                                <span class="stat-icon">💬</span>
+                                <span class="stat-value">${persona.total_interactions || 0}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="persona-card-footer">
+                        <div class="persona-price">
+                            <span class="price-label">Unlock for</span>
+                            <span class="price-value">${persona.price || 'FREE'} STT</span>
+                        </div>
+                        <button class="btn btn-primary btn-small" 
+                                onclick="window.location.href='persona-detail.html?id=${persona.id}'">
+                            Chat Now →
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCategoryEmoji(category) {
+            const emojis = {
+                'content-creator': '🎭',
+                'academic': '🎓',
+                'mystical': '🔮',
+                'special': '⭐'
+            };
+            return emojis[category] || '🤖';
+        }
+
+        // Update stats
+        function updateStats() {
+            fetch(`${window.CONFIG.API_BASE_URL}/stats`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('totalPersonas').textContent = data.totalPersonas || '0';
+                        document.getElementById('onlineUsers').textContent = data.onlineUsers || '0';
+                    }
+                })
+                .catch(() => {
+                    // Fallback stats
+                    document.getElementById('totalPersonas').textContent = '18';
+                    document.getElementById('onlineUsers').textContent = '42';
+                });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            
+            // Auto-load collection if wallet connected
+            if (window.currentWalletAddress) {
+                loadMyCollection();
+            }
+        });
+    </script>
 </body>
 </html>
