@@ -14,16 +14,21 @@
             <div class="game-title">AI_XANDRIA</div>
             <div class="game-subtitle">Digital Library of AI Personas</div>
         </div>
-        <div class="game-stats">
-            <div class="stat-item">
-                <span class="stat-value" id="totalPersonas">0</span>
-                <span class="stat-label">Personas</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-value" id="onlineUsers">0</span>
-                <span class="stat-label">Online</span>
-            </div>
-        </div>
+         <!-- Ganti bagian game-stats ini: -->
+<div class="game-stats">
+    <div class="stat-item">
+        <span class="stat-value" id="totalPersonas">0</span>
+        <span class="stat-label">Personas</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="onlineUsers">0</span>
+        <span class="stat-label">Online</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="recentActivity">0</span>
+        <span class="stat-label">Today</span>
+    </div>
+</div>
     </header>
 
     <!-- Wallet Connection -->
@@ -222,24 +227,24 @@
             };
             return emojis[category] || '🤖';
         }
-
-        // Update stats
-        function updateStats() {
-            fetch(`${window.CONFIG.API_BASE_URL}/stats`)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('totalPersonas').textContent = data.totalPersonas || '0';
-                        document.getElementById('onlineUsers').textContent = data.onlineUsers || '0';
-                    }
-                })
-                .catch(() => {
-                    // Fallback stats
-                    document.getElementById('totalPersonas').textContent = '18';
-                    document.getElementById('onlineUsers').textContent = '42';
-                });
-        }
-
+// Update stats function di view-personas.html
+function updateStats() {
+    fetch(`${window.CONFIG.API_BASE_URL}/stats`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('totalPersonas').textContent = data.stats.totalPersonas || '0';
+                document.getElementById('onlineUsers').textContent = data.stats.onlineUsers || '0';
+                document.getElementById('recentActivity').textContent = data.stats.recentActivity || '0';
+            }
+        })
+        .catch(() => {
+            // Fallback stats
+            document.getElementById('totalPersonas').textContent = '18';
+            document.getElementById('onlineUsers').textContent = '42';
+            document.getElementById('recentActivity').textContent = '5';
+        });
+}
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateStats();
