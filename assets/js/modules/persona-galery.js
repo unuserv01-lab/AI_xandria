@@ -1,4 +1,4 @@
-// assets/js/modules/persona-gallery.js
+// assets/js/modules/persona-gallery.js - UPDATED VERSION
 
 class PersonaGallery {
     constructor() {
@@ -15,11 +15,13 @@ class PersonaGallery {
 
     async loadPersonas() {
         try {
+            this.showLoadingState();
+            
             const category = document.getElementById('categoryFilter')?.value || '';
             const sort = document.getElementById('sortFilter')?.value || 'newest';
 
             const response = await fetch(
-                `${this.API_BASE_URL}/persona/featured?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sort)}`
+                `${this.API_BASE_URL}/personas/featured?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sort)}`
             );
 
             if (!response.ok) {
@@ -38,86 +40,83 @@ class PersonaGallery {
         } catch (error) {
             console.error('Error loading personas:', error);
             
-            if (error.message.includes('Failed to fetch')) {
-                this.showError('Network error. Please check if the backend server is running.');
+            // Fallback: Use persona-loader data
+            if (typeof personaLoader !== 'undefined') {
+                console.log('Using personaLoader fallback data');
+                this.personas = personaLoader.getRealmPersonas('all');
+                this.filteredPersonas = [...this.personas];
+                this.renderPersonas();
             } else {
-                this.showError('Failed to load personas. Please try again.');
+                this.showError('Failed to load personas. Please check your connection.');
             }
-            
-            // Fallback to empty state
-            this.personas = [];
-            this.filteredPersonas = [];
-            this.renderPersonas();
         }
     }
 
     renderPersonas() {
         const grid = document.getElementById('personasGrid');
+        const loadingState = document.getElementById('loadingState');
         const emptyState = document.getElementById('emptyState');
 
         if (!grid) return;
 
+        // Hide loading
+        if (loadingState) loadingState.style.display = 'none';
+
         if (this.filteredPersonas.length === 0) {
-            grid.innerHTML = '';
+            grid.innerHTML = "";
             if (emptyState) emptyState.style.display = 'block';
             return;
         }
 
         if (emptyState) emptyState.style.display = 'none';
+        
+        // Render personas
         grid.innerHTML = this.filteredPersonas.map(persona => this.createPersonaCard(persona)).join('');
 
         // Add click listeners
         document.querySelectorAll('.persona-card').forEach(card => {
             card.addEventListener('click', () => {
                 const personaId = card.dataset.personaId;
-                window.location.href = `/persona-detail.html?id=${personaId}`;
+                window.location.href = `persona-detail.html?id=${personaId}`;
             });
         });
     }
 
     createPersonaCard(persona) {
-        const traits = persona.traits || {};
-        const avgTrait = Object.values(traits).length > 0 
-            ? Object.values(traits).reduce((a, b) => a + b, 0) / Object.values(traits).length 
-            : 0;
-
+        // Handle both backend and frontend persona formats
+        const personaData = this.normalizePersonaData(persona);
+        
         return `
-            <div class="persona-card" data-persona-id="${persona.id}">
+            <div class="persona-card" data-persona-id="${personaData.id}">
                 <div class="persona-card-header">
-                    <img src="${persona.avatar_url}" alt="${persona.name}" class="persona-avatar">
-                    <div class="persona-badge">${this.getCategoryEmoji(persona.category)}</div>
+                    ${this.getAvatarHTML(personaData)}
+                    <div class="persona-badge">${this.getCategoryEmoji(personaData.category)}</div>
                 </div>
-
                 <div class="persona-card-body">
-                    <h3 class="persona-name">${persona.name}</h3>
-                    <p class="persona-tagline">${persona.tagline}</p>
-
+                    <h3 class="persona-name">${personaData.name}</h3>
+                    <p class="persona-tagline">${personaData.tagline}</p>
                     <div class="persona-stats">
                         <span class="stat">
                             <span class="stat-icon">⭐</span>
-                            <span class="stat-value">${(persona.rating || 0).toFixed(1)}</span>
+                            <span class="stat-value">${personaData.rating}</span>
                         </span>
                         <span class="stat">
                             <span class="stat-icon">💬</span>
-                            <span class="stat-value">${persona.total_interactions || 0}</span>
+                            <span class="stat-value">${personaData.interactions}</span>
                         </span>
                         <span class="stat">
-                            <span class="stat-icon">⚡</span>
-                            <span class="stat-value">${avgTrait.toFixed(0)}/10</span>
+                            <span class="stat-icon">👥</span>
+                            <span class="stat-value">${personaData.users}</span>
                         </span>
                     </div>
-
-                    <div class="persona-traits-mini">
-                        ${this.renderMiniTraits(traits)}
-                    </div>
                 </div>
-
                 <div class="persona-card-footer">
                     <div class="persona-price">
                         <span class="price-label">Unlock for</span>
-                        <span class="price-value">Ⓝ ${persona.price} STT</span>
+                        <span class="price-value">${personaData.price}</span>
                     </div>
-                    <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); window.location.href='/persona-detail.html?id=${persona.id}'">
+                    <button class="btn btn-primary btn-small" 
+                            onclick="event.stopPropagation(); window.location.href='persona-detail.html?id=${personaData.id}'">
                         Chat Now →
                     </button>
                 </div>
@@ -125,49 +124,43 @@ class PersonaGallery {
         `;
     }
 
-    renderMiniTraits(traits) {
-        const traitIcons = {
-            empathy: '❤️',
-            wisdom: '🧠',
-            humor: '😄',
-            energy: '⚡',
-            creativity: '🎨',
-            intelligence: '🌟',
-            logic: '🔍',
-            intuition: '🔮'
+    normalizePersonaData(persona) {
+        // Normalize data from different sources (backend vs frontend)
+        return {
+            id: persona.id || persona.name?.toLowerCase(),
+            name: persona.name || persona.displayName,
+            tagline: persona.tagline || 'AI Persona',
+            category: persona.category || persona.type || 'content-creator',
+            avatar_url: persona.avatar_url || persona.videoUrl || 
+                       `https://api.dicebear.com/7.x/bottts/svg?seed=${persona.name}`,
+            rating: (persona.rating || persona.stats?.rating || '4.5').replace('★', '').replace('%', ''),
+            interactions: persona.total_interactions || persona.stats?.users || '1.2K',
+            users: persona.users || persona.stats?.users || '1.5K',
+            price: persona.price || '5 STT'
         };
+    }
 
-        return Object.entries(traits)
-            .slice(0, 4)
-            .map(([key, value]) => `
-                <span class="mini-trait" title="${key}: ${value}/10">
-                    ${traitIcons[key] || '⭐'} ${value}
-                </span>
-            `).join('');
+    getAvatarHTML(persona) {
+        if (persona.avatar_url.includes('.mp4')) {
+            return `
+                <video class="persona-avatar" autoplay loop muted playsinline>
+                    <source src="${persona.avatar_url}" type="video/mp4">
+                </video>
+            `;
+        } else {
+            return `<img src="${persona.avatar_url}" alt="${persona.name}" class="persona-avatar">`;
+        }
     }
 
     getCategoryEmoji(category) {
         const emojis = {
-            'content-creator': '🎬',
-            'academic': '🎓',
+            'content-creator': '🎭',
+            'academic': '🎓', 
             'mystical': '🔮',
             'motivation': '💪',
             'tech': '💻',
-            'wellness': '🌿',
-            'creative': '🎨',
-            'education': '📚',
-            'science': '🔬',
-            'psychology': '🧠',
-            'arts': '🎭',
-            'fitness': '🏋️',
-            'therapy': '💆',
-            'business': '💼',
-            'literature': '📖',
-            'lifecoach': '🌟',
-            'futurism': '🚀',
-            'relationships': '💑'
+            'special': '⭐'
         };
-
         return emojis[category] || '🤖';
     }
 
@@ -202,30 +195,48 @@ class PersonaGallery {
     }
 
     filterBySearch(query) {
-        const searchLower = query.toLowerCase();
+        const searchLower = query.toLowerCase().trim();
+        
         if (!query) {
             this.filteredPersonas = [...this.personas];
         } else {
-            this.filteredPersonas = this.personas.filter(persona =>
-                persona.name.toLowerCase().includes(searchLower) ||
-                persona.tagline.toLowerCase().includes(searchLower) ||
-                (persona.personality && persona.personality.toLowerCase().includes(searchLower)) ||
-                persona.category.toLowerCase().includes(searchLower)
-            );
+            this.filteredPersonas = this.personas.filter(persona => {
+                const normalized = this.normalizePersonaData(persona);
+                return (
+                    normalized.name.toLowerCase().includes(searchLower) ||
+                    normalized.tagline.toLowerCase().includes(searchLower) ||
+                    normalized.category.toLowerCase().includes(searchLower)
+                );
+            });
         }
+        
         this.renderPersonas();
+    }
+
+    showLoadingState() {
+        const grid = document.getElementById('personasGrid');
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        
+        if (grid) grid.innerHTML = '';
+        if (loadingState) loadingState.style.display = 'block';
+        if (emptyState) emptyState.style.display = 'none';
     }
 
     showError(message) {
         const grid = document.getElementById('personasGrid');
-        if (!grid) return;
+        const loadingState = document.getElementById('loadingState');
         
+        if (loadingState) loadingState.style.display = 'none';
+        
+        if (!grid) return;
+
         grid.innerHTML = `
             <div class="error-state">
                 <div class="error-icon">⚠️</div>
-                <h3>Oops!</h3>
+                <h3>Oops! Something went wrong</h3>
                 <p>${message}</p>
-                <button class="btn btn-primary" onclick="location.reload()">
+                <button class="btn btn-primary" onclick="personaGallery.loadPersonas()">
                     Try Again
                 </button>
             </div>
@@ -235,5 +246,5 @@ class PersonaGallery {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new PersonaGallery();
+    window.personaGallery = new PersonaGallery();
 });
