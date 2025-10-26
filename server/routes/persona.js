@@ -398,5 +398,224 @@ function calculateRarity(traits) {
     if (avgValue >= 60) return 'Uncommon';
     return 'Common';
 }
+// ============================================
+// NEW ROUTES FOR VIEW-PERSONAS.HTML
+// ============================================
 
+// GET /api/personas/featured
+// Get featured personas for gallery (used by view-personas.html)
+router.get('/featured', async (req, res) => {
+    try {
+        const { category, sort, limit = 50 } = req.query;
+        
+        let query = `
+            SELECT 
+                persona_id as id,
+                name,
+                description,
+                category,
+                image_url as avatar_url,
+                traits,
+                stats->>'rating' as rating,
+                (stats->>'total_chats')::int as total_interactions,
+                owner_address,
+                is_featured,
+                created_at
+            FROM personas 
+            WHERE is_active = true
+        `;
+        
+        const params = [];
+        let paramIndex = 1;
+        
+        if (category && category !== '') {
+            query += ` AND category = $${paramIndex}`;
+            params.push(category);
+            paramIndex++;
+        }
+        
+        // Default: show featured personas
+        query += ` AND is_featured = true`;
+        
+        // Sorting
+        if (sort === 'popular') {
+            query += ` ORDER BY (stats->>'total_chats')::int DESC`;
+        } else if (sort === 'rating') {
+            query += ` ORDER BY (stats->>'rating')::numeric DESC`;
+        } else {
+            query += ` ORDER BY created_at DESC`; // newest first
+        }
+        
+        query += ` LIMIT $${paramIndex}`;
+        params.push(parseInt(limit));
+        
+        const result = await global.db.query(query, params);
+        
+        // Transform data for frontend
+        const personas = result.rows.map(persona => ({
+            id: persona.id,
+            name: persona.name,
+            tagline: persona.description?.substring(0, 100) + '...' || 'AI Persona',
+            description: persona.description,
+            category: persona.category,
+            avatar_url: persona.avatar_url,
+            traits: persona.traits || [],
+            rating: parseFloat(persona.rating) || 4.5,
+            total_interactions: persona.total_interactions || 0,
+            price: '5 STT', // Default price for chat access
+            owner: persona.owner_address,
+            is_featured: persona.is_featured,
+            created_at: persona.created_at
+        }));
+        
+        console.log(`✅ Featured personas loaded: ${personas.length} personas`);
+        
+        res.json({
+            success: true,
+            personas: personas,
+            total: personas.length
+        });
+        
+    } catch (error) {
+        console.error('❌ Error fetching featured personas:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load featured personas',
+            error: error.message
+        });
+    }
+});
+
+// GET /api/persona/owned
+// Get user's owned personas (for My Collection tab)
+router.get('/owned', async (req, res) => {
+    try {
+        const { walletAddress } = req.query;
+        
+        if (!walletAddress) {
+            return res.json({ 
+                success: true, 
+                personas: [] 
+            });
+        }
+        
+        const query = `
+            SELECT 
+                persona_id as id,
+                name,
+                description,
+                category,
+                image_url as avatar_url,
+                traits,
+                stats->>'rating' as rating,
+                (stats->>'total_chats')::int as total_interactions,
+                is_minted,
+                token_id,
+                created_at
+            FROM personas 
+            WHERE owner_address = $1 
+            AND is_active = true
+            ORDER BY created_at DESC
+        `;
+        
+        const result = await global.db.query(query, [walletAddress]);
+        
+        const personas = result.rows.map(persona => ({
+            id: persona.id,
+            name: persona.name,
+            tagline: persona.description?.substring(0, 100) + '...' || 'My AI Persona',
+            description: persona.description,
+            category: persona.category,
+            avatar_url: persona.avatar_url,
+            traits: persona.traits || [],
+            rating: parseFloat(persona.rating) || 0,
+            total_interactions: persona.total_interactions || 0,
+            price: 'FREE', // Owned personas are free to chat
+            is_minted: persona.is_minted,
+            token_id: persona.token_id,
+            created_at: persona.created_at
+        }));
+        
+        console.log(`✅ User collection loaded: ${personas.length} personas for ${walletAddress}`);
+        
+        res.json({
+            success: true,
+            personas: personas,
+            total: personas.length
+        });
+        
+    } catch (error) {
+        console.error('❌ Error fetching user collection:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load your collection',
+            error: error.message
+        });
+    }
+});
+
+// GET /api/stats
+// Get global stats for dashboard
+router.get('/stats', async (req, res) => {
+    try {
+        // Total personas count
+        const totalResult = await global.db.query(
+            'SELECT COUNT(*) as total FROM personas WHERE is_active = true'
+        );
+        const totalPersonas = parseInt(totalResult.rows[0].total);
+        
+        // Total users count (approximate)
+        const usersResult = await global.db.query(
+            'SELECT COUNT(DISTINCT owner_address) as users FROM personas WHERE is_active = true'
+        );
+        const totalUsers = parseInt(usersResult.rows[0].users);
+        
+        // Online users (placeholder - implement proper tracking later)
+        const onlineUsers = Math.floor(totalUsers * 0.1) + 25; // 10% of total users + base
+        
+        // Recent activity (last 24 hours)
+        const activityResult = await global.db.query(
+            `SELECT COUNT(*) as recent 
+             FROM personas 
+             WHERE created_at >= NOW() - INTERVAL '24 hours' 
+             AND is_active = true`
+        );
+        const recentActivity = parseInt(activityResult.rows[0].recent);
+        
+        res.json({
+            success: true,
+            stats: {
+                totalPersonas: totalPersonas,
+                totalUsers: totalUsers,
+                onlineUsers: onlineUsers,
+                recentActivity: recentActivity
+            }
+        });
+        
+    } catch (error) {
+        console.error('❌ Error fetching stats:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to load statistics',
+            error: error.message
+        });
+    }
+});
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+function calculateRarity(traits) {
+    // Simple rarity calculation based on trait values
+    const avgValue = traits.reduce((sum, t) => sum + (t.value || 50), 0) / traits.length;
+    
+    if (avgValue >= 90) return 'Legendary';
+    if (avgValue >= 80) return 'Epic';
+    if (avgValue >= 70) return 'Rare';
+    if (avgValue >= 60) return 'Uncommon';
+    return 'Common';
+}
+
+module.exports = router;
 module.exports = router;
