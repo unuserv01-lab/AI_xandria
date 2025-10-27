@@ -618,4 +618,3 @@ function calculateRarity(traits) {
 }
 
 module.exports = router;
-module.exports = router;
