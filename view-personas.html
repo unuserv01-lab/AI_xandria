@@ -3,257 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Personas - AI_xandria</title>
-    <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/personas.css">
+    <title>Discover Personas - AI_XANDRIA Gallery</title>
+    
+    <!-- 🌌 GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;600;800&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* === COSMIC BACKGROUND === */
+        body {
+            background: linear-gradient(135deg, #000000 0%, #0f0f0f 30%, #1a1a2e 70%, #000000 100%);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Cosmic Stars */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: cosmicMove 60s linear infinite;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        @keyframes cosmicMove {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-100px); }
+        }
+
+        /* === HEADER STYLES === */
+        .neon-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 3px solid rgba(255, 20, 147, 0.5);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .neon-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff1493, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        .neon-subtitle {
+            font-size: 1rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            margin-top: 0.2rem;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        /* === CARD STYLES === */
+        .persona-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .persona-card:hover {
+            transform: translateY(-8px);
+            border-color: #ff1493;
+            box-shadow: 0 20px 40px rgba(255, 20, 147, 0.3);
+        }
+
+        .category-badge {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        /* === BUTTON STYLES === */
+        .neon-button {
+            padding: 1rem 2rem;
+            background: rgba(255, 20, 147, 0.2);
+            border: 2px solid #ff1493;
+            color: #ff1493;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .neon-button:hover {
+            background: #ff1493;
+            color: #000000;
+            box-shadow: 0 0 30px #ff1493;
+            transform: translateY(-3px);
+        }
+
+        .cyan-button {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+        }
+
+        .cyan-button:hover {
+            background: #00ffff;
+            color: #000000;
+            box-shadow: 0 0 30px #00ffff;
+        }
+
+        /* === INPUT STYLES === */
+        .neon-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            color: white;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .neon-input:focus {
+            border-color: #ff1493;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+            outline: none;
+        }
+
+        .neon-select {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            color: white;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .neon-select:focus {
+            border-color: #ff1493;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+            outline: none;
+        }
+
+        /* === LOADING SPINNER === */
+        .loading-spinner {
+            border: 3px solid rgba(255, 20, 147, 0.3);
+            border-top: 3px solid #ff1493;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* === TEXT COLORS === */
+        .text-neon-pink {
+            color: #ff1493;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+        }
+
+        .text-neon-cyan {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* === SECTION TITLES === */
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff1493, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: #94a3b8;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        /* === PAGINATION === */
+        .pagination-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            color: #ff1493;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            background: #ff1493;
+            color: #000000;
+            border-color: #ff1493;
+        }
+
+        .pagination-btn.active {
+            background: #ff1493;
+            color: #000000;
+            border-color: #ff1493;
+        }
+    </style>
 </head>
 <body>
-    <!-- Game Header -->
-    <header class="game-header">
-        <div class="header-left">
-            <div class="game-title">AI_XANDRIA</div>
-            <div class="game-subtitle">Digital Library of AI Personas</div>
+    <!-- 🌌 HEADER -->
+    <header class="neon-header sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="neon-title">AI_XANDRIA</h1>
+                    <p class="neon-subtitle">Persona Discovery Portal</p>
+                </div>
+                <a href="index.html" class="neon-button">
+                    <i class="fas fa-plus mr-2"></i>Carousel View
+                </a>
+            </div>
         </div>
-         <!-- Ganti bagian game-stats ini: -->
-<div class="game-stats">
-    <div class="stat-item">
-        <span class="stat-value" id="totalPersonas">0</span>
-        <span class="stat-label">Personas</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-value" id="onlineUsers">0</span>
-        <span class="stat-label">Online</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-value" id="recentActivity">0</span>
-        <span class="stat-label">Today</span>
-    </div>
-</div>
     </header>
 
-    <!-- Wallet Connection -->
-    <button class="connect-wallet-btn" onclick="connectWallet()">Connect Wallet</button>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero-small">
-            <div class="container">
-                <h1>AI Personas Gallery</h1>
-                <p>Discover and interact with unique AI personalities</p>
-            </div>
-        </section>
-
-        <!-- Filters Section -->
-        <section class="filters-section">
-            <div class="container">
-                <div class="filters">
-                    <select id="categoryFilter" class="filter-select">
-                        <option value="">All Categories</option>
-                        <option value="content-creator">Content Creator</option>
-                        <option value="academic">Academic</option>
-                        <option value="special">Special</option>
-                    </select>
-                    
-                    <select id="sortFilter" class="filter-select">
-                        <option value="newest">Newest First</option>
-                        <option value="popular">Most Popular</option>
-                        <option value="rating">Highest Rated</option>
-                    </select>
-
-                    <div class="search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="searchInput" placeholder="Search personas...">
+    <!-- 🔍 FILTERS & SEARCH -->
+    <section class="bg-black/50 backdrop-blur-lg border-b border-cyan-500/20 sticky top-24 z-40">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-wrap gap-4 items-center justify-between">
+                <!-- Search -->
+                <div class="flex-1 min-w-[200px] max-w-md">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Search personas..." 
+                            class="neon-input w-full px-4 py-3 pl-12"
+                        >
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-neon-pink"></i>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Tab Navigation -->
-        <div class="container">
-            <div class="tab-navigation">
-                <button class="tab-btn active" data-tab="featured">Featured Personas</button>
-                <button class="tab-btn" data-tab="my-collection">My Collection</button>
+                <!-- Category Filter -->
+                <select id="categoryFilter" class="neon-select px-4 py-3">
+                    <option value="all">All Categories</option>
+                    <option value="spiritual">Spiritual</option>
+                    <option value="lifestyle">Lifestyle</option>
+                    <option value="technology">Technology</option>
+                    <option value="culinary">Culinary</option>
+                    <option value="arts">Arts</option>
+                    <option value="education">Education</option>
+                    <option value="science">Science</option>
+                    <option value="wellness">Wellness</option>
+                    <option value="mystery">Mystery</option>
+                </select>
+
+                <!-- Sort -->
+                <select id="sortFilter" class="neon-select px-4 py-3">
+                    <option value="popular">Most Popular</option>
+                    <option value="newest">Newest</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⭐ FEATURED PERSONAS -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="mb-6">
+            <h2 class="section-title">⭐ Featured Personas</h2>
+            <p class="section-subtitle">Hand-picked premium characters from the Xandria universe</p>
+        </div>
+        <div id="featuredGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Featured cards will be inserted here -->
+        </div>
+    </section>
+
+    <!-- 🎯 ALL PERSONAS -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="mb-6 flex justify-between items-center">
+            <div>
+                <h2 class="section-title">🎯 All Personas</h2>
+                <p class="section-subtitle">Browse <span id="totalCount" class="text-neon-cyan">0</span> available characters across dimensions</p>
+            </div>
+            
+            <!-- View Toggle -->
+            <div class="flex gap-2">
+                <button id="gridView" class="neon-button px-4 py-2">
+                    <i class="fas fa-th"></i> Grid
+                </button>
+                <button id="listView" class="px-4 py-2 bg-gray-800 text-gray-400 rounded-lg border border-gray-700">
+                    <i class="fas fa-list"></i> List
+                </button>
             </div>
         </div>
 
-        <!-- Personas Section -->
-        <section class="personas-section">
-            <div class="container">
-                <!-- Featured Personas Tab -->
-                <div id="featured-tab" class="tab-content active">
-                    <div id="personasGrid" class="personas-grid">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                    
-                    <!-- Loading State -->
-                    <div id="loadingState" class="loading-state">
-                        <div class="spinner"></div>
-                        <p>Loading personas...</p>
-                    </div>
+        <!-- Loading State -->
+        <div id="loadingState" class="flex justify-center items-center py-20">
+            <div class="loading-spinner"></div>
+            <p class="ml-4 text-neon-cyan">Loading dimensional personas...</p>
+        </div>
 
-                    <!-- Empty State -->
-                    <div id="emptyState" class="empty-state" style="display: none;">
-                        <div class="empty-icon">🤖</div>
-                        <h3>No Personas Found</h3>
-                        <p>Try adjusting your filters or check back later for new personas.</p>
+        <!-- Personas Grid -->
+        <div id="personasGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
+            <!-- Persona cards will be inserted here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-20 hidden">
+            <i class="fas fa-search text-6xl text-neon-pink mb-4"></i>
+            <h3 class="text-xl font-semibold text-neon-cyan mb-2">No personas found in this dimension</h3>
+            <p class="text-gray-400">Try adjusting your quantum filters</p>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="mt-8 flex justify-center gap-2 hidden">
+            <!-- Pagination buttons will be inserted here -->
+        </div>
+    </section>
+
+    <!-- 🎭 PERSONA CARD TEMPLATE -->
+    <template id="personaCardTemplate">
+        <div class="persona-card" data-persona-id="">
+            <div class="relative">
+                <img class="persona-avatar w-full h-48 object-cover" src="" alt="">
+                <span class="category-badge absolute top-2 right-2 px-3 py-1 text-xs font-semibold rounded-full"></span>
+            </div>
+            <div class="p-5">
+                <h3 class="persona-name text-xl font-bold text-white mb-1"></h3>
+                <p class="persona-role text-sm text-neon-pink mb-3 font-semibold"></p>
+                <p class="persona-personality text-gray-300 text-sm mb-4 line-clamp-2"></p>
+                
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="flex items-center text-yellow-400 text-glow">
+                        <i class="fas fa-star mr-1"></i>
+                        <span class="persona-rating font-semibold">0.0</span>
+                    </div>
+                    <div class="text-gray-400 text-sm">
+                        <i class="fas fa-message mr-1"></i>
+                        <span class="persona-interactions">0</span> chats
                     </div>
                 </div>
 
-                <!-- My Collection Tab -->
-                <div id="my-collection-tab" class="tab-content">
-                    <div id="myCollectionGrid" class="personas-grid">
-                        <!-- Will be populated with user's personas -->
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-neon-cyan text-glow">
+                        <span class="persona-cost">0</span> STT
                     </div>
-                    
-                    <div id="emptyCollection" class="empty-state" style="display: none;">
-                        <div class="empty-icon">🎨</div>
-                        <h3>Your Collection is Empty</h3>
-                        <p>Generate personas in the creator to build your collection!</p>
-                        <button class="btn btn-primary" onclick="window.location.href='index.html'">
-                            Create Persona
-                        </button>
-                    </div>
+                    <button class="interact-btn cyan-button px-6 py-2 font-semibold">
+                        Initiate Chat
+                    </button>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </template>
 
-    <!-- Navigation Controls -->
-    <div class="nav-controls">
-        <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
-        <button class="nav-btn" onclick="window.location.href='battle-arena.html'">⚔️ Arena</button>
-        <button class="nav-btn" onclick="window.location.href='marketplace.html'">🛒 Marketplace</button>
-    </div>
-
-    <!-- Scripts -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/modules/wallet-manager.js"></script>
-    <script src="assets/js/modules/persona-gallery.js"></script>
-    
-    <script>
-        // Tab functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update active tab
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab + '-tab').classList.add('active');
-                
-                // Load content based on tab
-                if (btn.dataset.tab === 'my-collection') {
-                    loadMyCollection();
-                }
-            });
-        });
-
-        // Load my collection
-        async function loadMyCollection() {
-            const grid = document.getElementById('myCollectionGrid');
-            const emptyState = document.getElementById('emptyCollection');
-            
-            if (!window.currentWalletAddress) {
-                grid.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${window.CONFIG.API_BASE_URL}/persona/owned?walletAddress=${window.currentWalletAddress}`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data.success && data.personas.length > 0) {
-                        grid.innerHTML = data.personas.map(persona => createPersonaCard(persona)).join('');
-                        emptyState.style.display = 'none';
-                    } else {
-                        grid.innerHTML = '';
-                        emptyState.style.display = 'block';
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading collection:', error);
-                grid.innerHTML = '';
-                emptyState.style.display = 'block';
-            }
-        }
-
-        // Create persona card HTML (reuse from persona-gallery.js)
-        function createPersonaCard(persona) {
-            return `
-                <div class="persona-card" data-persona-id="${persona.id}">
-                    <div class="persona-card-header">
-                        <img src="${persona.avatar_url}" alt="${persona.name}" class="persona-avatar" 
-                             onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=${persona.name}'">
-                        <div class="persona-badge">${getCategoryEmoji(persona.category)}</div>
-                    </div>
-                    <div class="persona-card-body">
-                        <h3 class="persona-name">${persona.name}</h3>
-                        <p class="persona-tagline">${persona.tagline}</p>
-                        <div class="persona-stats">
-                            <span class="stat">
-                                <span class="stat-icon">⭐</span>
-                                <span class="stat-value">${(persona.rating || 0).toFixed(1)}</span>
-                            </span>
-                            <span class="stat">
-                                <span class="stat-icon">💬</span>
-                                <span class="stat-value">${persona.total_interactions || 0}</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="persona-card-footer">
-                        <div class="persona-price">
-                            <span class="price-label">Unlock for</span>
-                            <span class="price-value">${persona.price || 'FREE'} STT</span>
-                        </div>
-                        <button class="btn btn-primary btn-small" 
-                                onclick="window.location.href='persona-detail.html?id=${persona.id}'">
-                            Chat Now →
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function getCategoryEmoji(category) {
-            const emojis = {
-                'content-creator': '🎭',
-                'academic': '🎓',
-                'mystical': '🔮',
-                'special': '⭐'
-            };
-            return emojis[category] || '🤖';
-        }
-// Update stats function di view-personas.html
-function updateStats() {
-    fetch(`${window.CONFIG.API_BASE_URL}/stats`)
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('totalPersonas').textContent = data.stats.totalPersonas || '0';
-                document.getElementById('onlineUsers').textContent = data.stats.onlineUsers || '0';
-                document.getElementById('recentActivity').textContent = data.stats.recentActivity || '0';
-            }
-        })
-        .catch(() => {
-            // Fallback stats
-            document.getElementById('totalPersonas').textContent = '18';
-            document.getElementById('onlineUsers').textContent = '42';
-            document.getElementById('recentActivity').textContent = '5';
-        });
-}
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            
-            // Auto-load collection if wallet connected
-            if (window.currentWalletAddress) {
-                loadMyCollection();
-            }
-        });
+    <script type="module">
+        import { PersonaGallery } from './assets/js/modules/persona-gallery.js';
+        
+        // Initialize gallery
+        const gallery = new PersonaGallery();
+        gallery.init();
     </script>
 </body>
 </html>
