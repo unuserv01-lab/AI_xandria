@@ -3,179 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Persona | AI_xandria</title>
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/persona-detail.css">
+    <title>Persona Details - AI_XANDRIA</title>
+    
+    <!-- 🌌 GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cinzel:wght@400;600;800&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* === COSMIC BACKGROUND === */
+        body {
+            background: linear-gradient(135deg, #000000 0%, #0f0f0f 30%, #1a1a2e 70%, #000000 100%);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Cosmic Stars */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: cosmicMove 60s linear infinite;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        @keyframes cosmicMove {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-100px); }
+        }
+
+        /* === HEADER STYLES === */
+        .neon-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 3px solid rgba(255, 20, 147, 0.5);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .neon-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff1493, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        /* === PROFILE SECTION === */
+        .profile-gradient {
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
+            border-bottom: 3px solid rgba(255, 20, 147, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* === CARD STYLES === */
+        .neon-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* === TAB STYLES === */
+        .tab-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #ff1493;
+            color: #ff1493;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #00ffff;
+            border-bottom-color: rgba(0, 255, 255, 0.3);
+        }
+
+        /* === BUTTON STYLES === */
+        .neon-button {
+            padding: 1rem 2rem;
+            background: rgba(255, 20, 147, 0.2);
+            border: 2px solid #ff1493;
+            color: #ff1493;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .neon-button:hover {
+            background: #ff1493;
+            color: #000000;
+            box-shadow: 0 0 30px #ff1493;
+            transform: translateY(-3px);
+        }
+
+        .cyan-button {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+        }
+
+        .cyan-button:hover {
+            background: #00ffff;
+            color: #000000;
+            box-shadow: 0 0 30px #00ffff;
+        }
+
+        /* === CHAT STYLES === */
+        .chat-container {
+            height: 600px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(255, 20, 147, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .message-user {
+            background: linear-gradient(135deg, #ff1493, #00ffff);
+            color: black;
+            font-weight: bold;
+            border-radius: 15px 15px 5px 15px;
+        }
+
+        .message-persona {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: white;
+            border-radius: 15px 15px 15px 5px;
+        }
+
+        /* === INPUT STYLES === */
+        .neon-input {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+            color: white;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .neon-input:focus {
+            border-color: #ff1493;
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+            outline: none;
+        }
+
+        /* === LOADING & ANIMATIONS === */
+        .loading-spinner {
+            border: 4px solid rgba(255, 20, 147, 0.3);
+            border-top: 4px solid #ff1493;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite;
+            animation-fill-mode: both;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: .4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+
+        /* === TEXT COLORS === */
+        .text-neon-pink {
+            color: #ff1493;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+        }
+
+        .text-neon-cyan {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* === BADGE STYLES === */
+        .trait-badge {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            border-radius: 20px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.8rem;
+        }
+
+        .interest-badge {
+            background: rgba(255, 20, 147, 0.2);
+            border: 1px solid #ff1493;
+            color: #ff1493;
+            border-radius: 20px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.8rem;
+        }
+
+        /* === MODAL STYLES === */
+        .neon-modal {
+            background: rgba(30, 41, 59, 0.95);
+            border: 2px solid rgba(255, 20, 147, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="logo"> AI_xandria</a>
-            <div class="nav-links">
-                <a href="/">Generate</a>
-                <a href="/view-personas.html">Explore</a>
-                <a href="/my-chats.html">My Chats</a>
-                <div class="wallet-info" id="walletInfo">
-                    <span class="wallet-address" id="walletAddress">Connect Wallet</span>
-                </div>
+    <!-- 🌌 HEADER -->
+    <header class="neon-header sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center gap-4">
+                <a href="view-personas.html" class="text-neon-cyan hover:text-white transition">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </a>
+                <h1 class="neon-title">Persona Details</h1>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Persona Header -->
-    <section class="persona-header" id="personaHeader">
-        <div class="container">
-            <button class="back-btn" onclick="window.history.back()">← Back</button>
-            
-            <div class="persona-header-content">
-                <div class="persona-avatar-large">
-                    <img id="personaAvatar" src="" alt="Persona Avatar">
-                </div>
-                <div class="persona-info">
-                    <h1 id="personaName">Loading...</h1>
-                    <p class="tagline" id="personaTagline"></p>
-                    <div class="persona-meta">
-                        <span class="category-badge" id="personaCategory"></span>
-                        <span class="price-badge" id="personaPrice">💎 0 STT</span>
-                        <span class="rating" id="personaRating">⭐ 0.0</span>
-                        <span class="interactions" id="personaInteractions">👥 0</span>
-                    </div>
-                    <div class="personality-traits" id="personalityTraits"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ⏳ LOADING STATE -->
+    <div id="loadingState" class="container mx-auto px-4 py-20 text-center">
+        <div class="loading-spinner w-12 h-12 mx-auto"></div>
+        <p class="mt-4 text-neon-cyan">Loading dimensional persona...</p>
+    </div>
 
-    <!-- Main Content -->
-    <section class="main-content">
-        <div class="container">
-            <div class="content-layout">
-                <!-- Sidebar: Persona Details -->
-                <aside class="sidebar">
-                    <div class="card">
-                        <h3>About</h3>
-                        <p id="personaPersonality"></p>
+    <!-- 🎭 MAIN CONTENT -->
+    <div id="mainContent" class="hidden">
+        <!-- PERSONA PROFILE SECTION -->
+        <section class="profile-gradient py-12">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <!-- AVATAR -->
+                    <div class="flex-shrink-0">
+                        <img id="personaAvatar" src="" alt="" class="w-48 h-48 rounded-full border-4 border-cyan-500 shadow-2xl shadow-cyan-500/30">
                     </div>
 
-                    <div class="card">
-                        <h3>Backstory</h3>
-                        <p id="personaBackstory"></p>
-                    </div>
+                    <!-- INFO -->
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 id="personaName" class="text-4xl font-bold mb-2 text-white"></h1>
+                        <p id="personaRole" class="text-xl text-neon-cyan mb-4 font-semibold"></p>
+                        <p id="personaPersonality" class="text-lg mb-6 text-gray-300"></p>
 
-                    <div class="card">
-                        <h3>Traits</h3>
-                        <div class="traits-chart" id="traitsChart">
-                            <!-- Traits will be injected here -->
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h3>Rate this Persona</h3>
-                        <div class="rating-input" id="ratingSection">
-                            <div class="stars">
-                                <span class="star" data-rating="1">⭐</span>
-                                <span class="star" data-rating="2">⭐</span>
-                                <span class="star" data-rating="3">⭐</span>
-                                <span class="star" data-rating="4">⭐</span>
-                                <span class="star" data-rating="5">⭐</span>
+                        <!-- STATS -->
+                        <div class="flex flex-wrap justify-center md:justify-start gap-6 mb-6">
+                            <div class="text-center">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-star text-yellow-400 text-glow"></i>
+                                    <span id="personaRating" class="text-2xl font-bold text-white">0.0</span>
+                                </div>
+                                <p class="text-sm text-neon-cyan">Rating</p>
                             </div>
-                            <textarea id="reviewComment" placeholder="Share your experience..."></textarea>
-                            <button class="btn btn-secondary" id="submitRating">Submit Review</button>
-                        </div>
-                    </div>
-                </aside>
-
-                <!-- Main: Chat Interface -->
-                <main class="chat-section">
-                    <!-- Locked State -->
-                    <div class="locked-overlay" id="lockedOverlay">
-                        <div class="lock-card">
-                            <div class="lock-icon">🔒</div>
-                            <h2>Unlock this Conversation</h2>
-                            <p>Pay <span id="unlockPrice">0 STT</span> to start chatting with <span id="unlockPersonaName"></span></p>
-                            <button class="btn btn-primary btn-large" id="unlockBtn">
-                                💎 Pay & Unlock Chat
-                            </button>
-                            <p class="disclaimer">One-time payment for unlimited conversations</p>
-                        </div>
-                    </div>
-
-                    <!-- Chat Interface (Hidden until unlocked) -->
-                    <div class="chat-container" id="chatContainer" style="display: none;">
-                        <div class="chat-header">
-                            <h3>💬 Chat with <span id="chatPersonaName"></span></h3>
-                            <span class="status-indicator">🟢 Online</span>
-                        </div>
-
-                        <div class="chat-messages" id="chatMessages">
-                            <div class="welcome-message">
-                                <p>👋 Chat unlocked! Start your conversation below.</p>
+                            <div class="text-center">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-message text-neon-pink"></i>
+                                    <span id="personaInteractions" class="text-2xl font-bold text-white">0</span>
+                                </div>
+                                <p class="text-sm text-neon-cyan">Chats</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-coins text-yellow-400"></i>
+                                    <span id="personaCost" class="text-2xl font-bold text-neon-cyan text-glow">0</span>
+                                    <span class="text-lg text-neon-cyan">STT</span>
+                                </div>
+                                <p class="text-sm text-neon-cyan">Per Session</p>
                             </div>
                         </div>
 
-                        <div class="chat-input-area">
-                            <textarea 
-                                id="chatInput" 
-                                placeholder="Type your message..."
-                                rows="3"
-                            ></textarea>
-                            <button class="btn btn-primary" id="sendBtn">
-                                Send ✈️
-                            </button>
+                        <!-- TAGS -->
+                        <div id="personaTraits" class="flex flex-wrap gap-2 justify-center md:justify-start">
+                            <!-- Trait badges will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABS SECTION -->
+        <section class="container mx-auto px-4 py-8">
+            <div class="neon-card overflow-hidden">
+                <!-- TAB HEADERS -->
+                <div class="border-b border-gray-700">
+                    <div class="flex">
+                        <button id="tabAbout" class="tab-btn px-6 py-4 active">
+                            <i class="fas fa-info-circle mr-2"></i>About
+                        </button>
+                        <button id="tabChat" class="tab-btn px-6 py-4 text-gray-400">
+                            <i class="fas fa-comment mr-2"></i>Chat
+                        </button>
+                        <button id="tabReviews" class="tab-btn px-6 py-4 text-gray-400">
+                            <i class="fas fa-star mr-2"></i>Reviews
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB CONTENT -->
+                <div class="p-6">
+                    <!-- ABOUT TAB -->
+                    <div id="contentAbout" class="tab-content">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-neon-pink mb-3">📖 Backstory</h3>
+                                <p id="personaBackstory" class="text-gray-300 leading-relaxed"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-neon-pink mb-3">👤 Appearance</h3>
+                                <p id="personaAppearance" class="text-gray-300 leading-relaxed"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-neon-pink mb-3">💬 Interaction Style</h3>
+                                <p id="personaStyle" class="text-gray-300 leading-relaxed"></p>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-neon-pink mb-3">❤️ Interests</h3>
+                                <div id="personaInterests" class="flex flex-wrap gap-2">
+                                    <!-- Interest badges will be inserted here -->
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Deepseek Chat Widget (Alternative) -->
-                    <div class="deepseek-widget" id="deepseekWidget" style="display: none;">
-                        <iframe 
-                            id="deepseekFrame"
-                            src="" 
-                            width="100%" 
-                            height="600px"
-                            frameborder="0"
-                        ></iframe>
+                    <!-- CHAT TAB -->
+                    <div id="contentChat" class="tab-content hidden">
+                        <!-- LOCKED STATE (BEFORE PAYMENT) -->
+                        <div id="chatLocked" class="text-center py-12">
+                            <i class="fas fa-lock text-6xl text-neon-pink mb-4"></i>
+                            <h3 class="text-2xl font-bold text-neon-cyan mb-2">Unlock Chat to Start Conversation</h3>
+                            <p class="text-gray-400 mb-6">Pay <span id="costDisplay" class="text-neon-cyan font-bold">0</span> STT to begin chatting</p>
+                            <button id="unlockChatBtn" class="neon-button px-8 py-4 text-lg">
+                                <i class="fas fa-unlock mr-2"></i>Unlock Chat for <span id="costDisplay2" class="font-bold">0</span> STT
+                            </button>
+                            <p class="text-sm text-gray-500 mt-4">One-time payment • Unlimited messages</p>
+                        </div>
+
+                        <!-- ACTIVE CHAT (AFTER PAYMENT) -->
+                        <div id="chatActive" class="hidden">
+                            <div class="chat-container flex flex-col">
+                                <!-- MESSAGES -->
+                                <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                                    <!-- Welcome message -->
+                                    <div class="flex gap-3">
+                                        <img id="chatAvatar" src="" alt="" class="w-10 h-10 rounded-full border-2 border-cyan-500">
+                                        <div class="message-persona max-w-xs p-4">
+                                            <p id="welcomeMessage" class="text-white">Hello! I'm excited to chat with you!</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- INPUT -->
+                                <div class="bg-gray-900 border-t border-gray-700 p-4">
+                                    <div class="flex gap-2">
+                                        <input 
+                                            type="text" 
+                                            id="chatInput"
+                                            placeholder="Type your message..."
+                                            class="neon-input flex-1 px-4 py-3"
+                                        >
+                                        <button id="sendBtn" class="cyan-button px-6 py-3 font-semibold">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        Session ID: <span id="sessionDisplay" class="text-neon-cyan">Not started</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- END SESSION BUTTON -->
+                            <div class="mt-4 text-right">
+                                <button id="endSessionBtn" class="text-red-400 hover:text-red-300 font-semibold transition">
+                                    <i class="fas fa-times-circle mr-1"></i>End Session
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </main>
-            </div>
-        </div>
-    </section>
 
-    <!-- Payment Modal -->
-    <div class="modal" id="paymentModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>💳 Complete Payment</h2>
-            <div class="payment-details">
-                <div class="payment-row">
-                    <span>Persona:</span>
-                    <strong id="paymentPersonaName"></strong>
-                </div>
-                <div class="payment-row">
-                    <span>Amount:</span>
-                    <strong id="paymentAmount">0.0000002STT</strong>
-                </div>
-                <div class="payment-row">
-                    <span>Your Wallet:</span>
-                    <code id="paymentWallet"></code>
+                    <!-- REVIEWS TAB -->
+                    <div id="contentReviews" class="tab-content hidden">
+                        <div id="reviewsList">
+                            <p class="text-gray-500 text-center py-8">No reviews yet. Be the first to rate this persona!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="payment-status" id="paymentStatus">
-                <div class="spinner"></div>
-                <p>Processing payment...</p>
+        </section>
+    </div>
+
+    <!-- 💰 PAYMENT MODAL -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="neon-modal p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-neon-cyan mb-4">Unlock Chat</h3>
+            <p class="text-gray-400 mb-6">Complete payment to start chatting</p>
+
+            <!-- PAYMENT STEPS -->
+            <div id="paymentStep1" class="space-y-4">
+                <div class="modal-content p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-300">Amount:</span>
+                        <span id="modalCost" class="text-2xl font-bold text-neon-cyan text-glow">0 STT</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm text-gray-400">
+                        <span>Network Fee:</span>
+                        <span>~0.000005 STT</span>
+                    </div>
+                </div>
+
+                <button id="confirmPaymentBtn" class="w-full neon-button py-3">
+                    Confirm Payment
+                </button>
             </div>
 
-            <div class="payment-actions">
-                <button class="btn btn-secondary" id="cancelPayment">Cancel</button>
-                <button class="btn btn-primary" id="confirmPayment">Confirm Payment</button>
+            <!-- PROCESSING STATE -->
+            <div id="paymentStep2" class="hidden text-center py-8">
+                <div class="loading-spinner w-16 h-16 mx-auto mb-4"></div>
+                <p class="text-neon-cyan font-semibold">Processing payment...</p>
+                <p class="text-sm text-gray-400 mt-2">Please wait while we verify your transaction</p>
             </div>
+
+            <!-- SUCCESS STATE -->
+            <div id="paymentStep3" class="hidden text-center py-8">
+                <i class="fas fa-check-circle text-6xl text-green-400 mb-4"></i>
+                <h4 class="text-xl font-bold text-neon-cyan mb-2">Payment Successful!</h4>
+                <p class="text-gray-400 mb-4">Chat is now unlocked</p>
+                <button id="startChatBtn" class="cyan-button px-6 py-3 font-bold">
+                    Start Chatting
+                </button>
+            </div>
+
+            <button id="closeModalBtn" class="mt-4 w-full text-gray-400 hover:text-white transition">
+                Cancel
+            </button>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="/assets/js/modules/wallet-manager.js"></script>
-    <script src="/assets/js/modules/pay-to-chat.js"></script>
-    <script src="/assets/js/modules/persona-chat.js"></script>
+    <script type="module">
+        import { PersonaDetail } from './assets/js/modules/persona-detail.js';
+        
+        const detail = new PersonaDetail();
+        detail.init();
+    </script>
 </body>
 </html>
